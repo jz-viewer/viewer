@@ -1,0 +1,85 @@
+{
+    "code": "0",
+    "message": "Success",
+    "total": null,
+    "data": [
+        {
+            "menu_id": 1,
+            "menu_name": "首页",
+            "menu_path": "pages/fyshj/page.html",
+            "menu_icon": null,
+            "menu_image_ath": null,
+            "menu_type": 2,
+            "parent_menu_id": 5,
+            "menu_sort_id": 2,
+            "active": "",
+            "children": []
+        },
+        {
+            "menu_id": 2,
+            "menu_name": "质量查询",
+            "menu_path": "pages/zhlchx/page.html",
+            "menu_icon": null,
+            "menu_image_ath": null,
+            "menu_type": 2,
+            "parent_menu_id": 5,
+            "menu_sort_id": 2,
+            "children": [
+                {
+                    "menu_id": 6,
+                    "menu_name": "质量查询",
+                    "menu_path": "pages/zhlchx/pages/court/page.html",
+                    "menu_icon": null,
+                    "menu_image_ath": null,
+                    "menu_type": 2,
+                    "parent_menu_id": 5,
+                    "menu_sort_id": 2,
+                    "children": []
+                }
+            ]
+        },
+        {
+            "menu_id": 3,
+            "menu_name": "统计报表",
+            "menu_path": "pages/tjbb/page.html",
+            "menu_icon": null,
+            "menu_image_ath": null,
+            "menu_type": 2,
+            "parent_menu_id": 5,
+            "menu_sort_id": 2,
+            "children": []
+        },
+        {
+            "menu_id": 4,
+            "menu_name": "用户管理",
+            "menu_path": "pages/users/page.html",
+            "menu_icon": null,
+            "menu_image_ath": null,
+            "menu_type": 2,
+            "parent_menu_id": 5,
+            "menu_sort_id": 2,
+            "children": []
+        },
+        {
+            "menu_id": 5,
+            "menu_name": "系统设置",
+            "menu_path": "pages/ssconfig/page.html",
+            "menu_icon": null,
+            "menu_image_ath": null,
+            "menu_type": 2,
+            "parent_menu_id": 5,
+            "menu_sort_id": 2,
+            "children": []
+        }, {
+            "menu_id": 6,
+            "menu_name": "配置管理",
+            "menu_path": "pages/configMan/page.html",
+            "menu_icon": null,
+            "menu_image_ath": null,
+            "menu_type": 2,
+            "parent_menu_id": 5,
+            "menu_sort_id": 2,
+            "children": []
+        }
+    ]
+}

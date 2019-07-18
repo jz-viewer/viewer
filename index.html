@@ -1,0 +1,104 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>质量检查系统</title>
+    <link href="favicon.ico" rel="shortcut icon" type="image/x-icon" />
+    <link rel="stylesheet" href="plugin/layer/skin/layer.css" />
+    <link rel="stylesheet" href="plugin/bootstrap/css/bootstrap.min.css" />
+    <link rel="stylesheet" href="plugin/bootstrap/css/font-awesome.min.css" />
+    <link rel="stylesheet" href="plugin/bootstrap/css/animate.css" />
+    <link rel="stylesheet" href="./css/base.css">
+    <link rel="stylesheet" href="./css/index.css">
+</head>
+
+<body ng-app="myApp" ng-controller="appController">
+    <div id="header" class="clearfix no-print">
+        <!-- <div class="fl logo">润普电子卷宗质量检查系统</div> -->
+        <div class="fl logo"></div>
+        <div class="fl menu_box">
+            <ul class="clearfix">
+                <!-- <li ng-repeat="menu in publicMenuArray" class="fl"><a ng-href="{{'#'+menu.menu_path}}">{{menu.menu_name}}</a></li> -->
+                <li class="fl active">首页</li>
+                <li class="fl">质量查询</li>
+                <li class="fl">统计报表</li>
+                <li class="fl">用户管理</li>
+                <li class="fl">系统设置</li>
+                <li class="fl">配置管理</li>
+            </ul>
+        </div>
+        <div class="fr user_box clearfix">
+            <div class="fl">
+                <span id="current-time" class="clearfix" style="display: inline-block"></span>
+            </div>
+            <div class="fl">
+                <span class="dropdown">
+                    <!--<span class="zh" ng-click="turnZh()"><img src="./img/left_icon10.png"></span>-->
+                    <div class="dropdown-toggle user-text user_icon" data-toggle="dropdown" aria-haspopup="true"
+                        aria-expanded="true">
+                    </div>
+                    <ul class="dropdown-menu" aria-labelledby="dropdownMenu1" style="margin: 0">
+                        <li><a href="javascript:void(0) " ng-click="updatePassword()" style="display: none">修改密码</a></li>
+                        <li><a href="javascript:void(0) " ng-click="logout()">退出登录</a></li>
+                    </ul>
+                </span>
+                <span class="dropdown">
+                    <!--<span class="zh" ng-click="turnZh()"><img src="./img/left_icon10.png"></span>-->
+                    <div class="dropdown-toggle user-text down_icon" data-toggle="dropdown" aria-haspopup="true"
+                        aria-expanded="true">
+                    </div>
+                    <ul class="dropdown-menu" aria-labelledby="dropdownMenu1" style="margin: 0">
+                        <li><a href="javascript:void(0) " ng-click="updatePassword()"  style="display: none">修改密码</a></li>
+                        <li><a href="javascript:void(0) " ng-click="logout()">退出登录</a></li>
+                    </ul>
+                </span>
+
+                <span class="court_name">{{userInfo.courtName}}</span><span class="user_name">{{userInfo.userFullName}}</span>
+            </div>
+        </div>
+    </div>
+    <div id="main_repassword_div" class="no-print" style="color:#000;display: none;padding: 20px 0 0 0">
+        <form id="updateLoginPWD">
+            <div class="form-group">
+                <label class="control-label col-sm-4" style="text-align: right">用户名：</label>
+                <span class="control-span col-sm-7" id="main_userName_text">{{userInfo.userFullName}}</span>
+            </div>
+            <div class="form-group">
+                <label class="control-label col-sm-4" style="text-align: right">密&nbsp;&nbsp;码：</label>
+                <input class="easyui-validatebox col-sm-7" type="password" validType="length[6,20]"
+                    invalidMessage="用户密码不能少于6个大于20个字符！"
+                    style="height:30px;border:1px solid #ccc;border-radius:3px;padding-left: 5px " id="main_password">
+            </div>
+            <div class="form-group">
+                <label class="control-label col-sm-4" style="text-align: right">确认密码：</label>
+                <input class="easyui-validatebox col-sm-7" type="password" validType="equals['#main_password']"
+                    invalidMessage="两次输入密码不匹配"
+                    style="height:30px;border:1px solid #ccc;border-radius:3px;padding-left: 5px" id="r_password">
+            </div>
+            <div class="form-group text-center" style="margin-bottom: 0">
+                <button class="btn btn-success" type="submit" ng-click="_submitForm()"> 确 定</button>
+            </div>
+        </form>
+    </div>
+    <iframe name="myiframe" class="J_iframe" src="./pages/fyshj/page.html" frameborder="0" align="left" width="100%"
+        height="1745" scrolling="no">
+        <p>你的浏览器不支持此页面</p>
+    </iframe>
+</body>
+<script type="text/javascript" src="plugin/jquery/jquery.min.js"></script>
+<script type="text/javascript" src="plugin/jquery/jquery.validate.js"></script>
+<script type="text/javascript" src="plugin/jquery/messages_zh.js"></script>
+<script type="text/javascript" src="plugin/angular/angular.min.js"></script>
+<script type="text/javascript" src="plugin/angular/angular-ui-router.min.js"></script>
+<script type="text/javascript" src="plugin/angular/angular-sanitize.min.js"></script>
+<script type="text/javascript" src="plugin/bootstrap/js/bootstrap.min.js"></script>
+<script type="text/javascript" src="plugin/easyui/jquery.easyui.min.js"></script>
+<script type="text/javascript" src="js/app_services.js"></script>
+<script type="text/javascript" src="plugin/jquery/jquery.min.js"></script>
+<script type="text/javascript" src="plugin/layer/layer.min.js"></script>
+<script type="text/javascript" src="./js/index.js"></script>
+
+</html>

@@ -1,0 +1,449 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>系统设置</title>
+    <link rel="stylesheet" href="../../plugin/easyui/easyui.css" />
+
+    <link rel="stylesheet" href="../../plugin/zTree3/css/zTreeStyle/zTreeStyle.css" />
+
+    <link rel="stylesheet" href="../../plugin/layer/skin/layer.css" />
+    <link rel="stylesheet" href="../../plugin/bootstrap/css/bootstrap.min.css" />
+    <link rel="stylesheet" href="../../plugin/bootstrap/css/font-awesome.min.css" />
+    <link rel="stylesheet" href="../../plugin/bootstrap/css/animate.css" />
+    <link rel="stylesheet" href="../../css/base.css">
+    <!-- <link rel="stylesheet" href="../../plugin/zTree3/css/metroStyle/metroStyle.css" /> -->
+
+    <link rel="stylesheet" href="./css/page.css">
+</head>
+
+<body class="clearfix" ng-app="myApp" ng-controller="appController">
+    <div class="left_box fl">
+        <ul class="left_box_menu">
+            <li class="active">
+                <a><span class="yonghu_icon"></span>目录规则设置</a>
+            </li>
+            <!-- <li>
+                <a><span class="jiagou_icon"></span>检测阀值设置</a>
+            </li>
+            <li>
+                <a><span class="juese_icon"></span>预警规则设置</a>
+            </li> -->
+        </ul>
+    </div>
+    <div class="right_c_box fl">
+        <div class="r_header">
+            <p class="r_header_title"><span class="y_line"></span><span class="r_header_title_val">系统设置</span></p>
+            <div class="select_c_box select_c_box_court xt_config">
+                <div class="select_box"><span>案件类型：</span>
+                    <div class="btn-group dropdown my-dropdown" id="dropdown">
+                        <input id="caseTpye_input" placeholder="请选择案件类型" ng-model="caseTypeName" readonly="readonly"
+                            type="input" class="btn my-btn-default btn-default dropdown-toggle" data-toggle="dropdown"
+                            aria-haspopup="true" aria-expanded="false">
+                        </input>
+                        <input type="hidden" name="hidedrop_1" id="hidedrop_1" value="超级管理员" />
+                        <div class="dropdown-menu b_ul_menu my_drop">
+                            <ul class="b_ul_menu caseType_ul">
+                                <li ng-repeat="item in caseTypeArr" ng-click="CaseTypeClic(item)"><a
+                                    href="#">{{item.caseTypeName}}</a></li>
+                            </ul>
+                        </div>
+                        <span class="input-group-addon" data-toggle="dropdown" aria-haspopup="true"
+                            aria-expanded="true">
+                            <!-- <span class="caret court-fa-caret" style="display: inline-block;"></span>
+                            <i class="fa fa-close court-fa-close" style="display: none;"></i> -->
+                            <span class="caret ng-hide" ng-show="!caseTypeName"></span>
+                            <i class="fa fa-close" ng-show="caseTypeName" ng-click="clearCaseTypeName()"></i>
+                        </span>
+                    </div>
+                </div>
+                <div class="select_box select_box_room"><span>审判程序：</span>
+                    <div class="btn-group dropdown my-dropdown spcx" id="dropdown">
+                        <input readonly="readonly" placeholder="请选择审判程序" ng-model="spcxName" type="input"
+                            class="btn my-btn-default btn-default dropdown-toggle " data-toggle="dropdown"
+                            aria-haspopup="true" aria-expanded="false">
+                        </input>
+                        <input type="hidden" name="hidedrop_1" id="hidedrop_1" value="超级管理员" />
+                        <div class="dropdown-menu b_ul_menu tingshi_drop">
+                            <ul class="b_ul_menu tingshi_ul">
+                                <li ng-repeat="item in spcxArr" ng-click="spcxClic(item)"><a
+                                        href="#">{{item.spcxName}}</a></li>
+                            </ul>
+                        </div>
+                        <span class="input-group-addon" data-toggle="dropdown" aria-haspopup="true"
+                            aria-expanded="true">
+                            <span class="caret ng-hide" ng-show="!spcxName"></span>
+                            <i class="fa fa-close" ng-show="spcxName" ng-click="clearRoomName()"></i>
+                        </span>
+                    </div>
+                </div>
+                <div class="select_box select_box_cbr"><span style="left: 0;"><span>案件阶段：</span>
+                        <div class="btn-group dropdown my-dropdown" id="dropdown">
+                            <input ng-model="search_ajjdName" readonly="readonly" placeholder="请选择" type="input"
+                                class="btn my-btn-default btn-default dropdown-toggle" data-toggle="dropdown"
+                                aria-haspopup="true" aria-expanded="false">
+
+                            </input>
+                            <input type="hidden" name="hidedrop_1" id="hidedrop_1" value="超级管理员" />
+                            <div class="dropdown-menu b_ul_menu ">
+                                <ul class="b_ul_menu tingshi_ul">
+                                    <li ng-repeat="item in ajjdArr" ng-click="search_ajjdClic(item)"><a
+                                            href="#">{{item.ajjdName}}</a></li>
+                                </ul>
+                            </div>        
+                            <span class="input-group-addon" data-toggle="dropdown" aria-haspopup="true"
+                                aria-expanded="true">
+                                <span class="caret ng-hide" ng-show="!search_ajjdName"></span>
+                                <i class="fa fa-close" ng-show="search_ajjdName" ng-click="clearAjjdName()"></i>
+                            </span>
+                        </div>
+                </div>
+                <button class="btn btn-info btn-sm my-search top_search" ng-click="search()">查询</button>
+            </div>
+        </div>
+        <div class="r_content">
+            <div class="r_content_tool clearfix">
+                <div class="my_bths fl">
+                    <button class="btn btn-info btn-sm my-search yh-my-search" ng-click="addNewUser()"><span
+                            class="glyphicon glyphicon-plus"></span>新建</button>
+                    <button class="btn btn-info btn-sm my-search yh-my-search" ng-click="editUser()"><span
+                            class="glyphicon glyphicon-pencil"></span>编辑</button>
+                    <button class="btn btn-info btn-sm my-search js-my-search" ng-click="jsaddNewUser()"><span
+                            class="glyphicon glyphicon-plus"></span>新建</button>
+                    <button class="btn btn-info btn-sm my-search js-my-search" ng-click="jseditUser()"><span
+                            class="glyphicon glyphicon-pencil"></span>编辑</button>
+                    <button class="btn btn-info btn-sm my-search" ng-click="removeUser()"><span
+                            class="glyphicon glyphicon-trash"></span>删除</button>
+                </div>
+            </div>
+            <div class="t_content">
+                <table region="center" style="width:100%;min-height:500px;overflow: hidden" id="yichuli-table"
+                    class="easyui-datagrid">
+                </table>
+            </div>
+        </div>
+    </div>
+    <!-- 目录规则新增 -->
+    <div id="scopeForm" style="padding: 10px;float: left;width: 100%;display: none;overflow: hidden;">
+        <form name="myForm-add">
+            <div class="form-group clearInput" >
+                <label class="control-label col-xs-5">案件类型：</label>
+                <div class="row-180">
+                    <div class="input-group col-xs-12 input-group-sm">
+                        <input type="text" placeholder="请选择" class="form-control addInput_caseType" data-toggle="dropdown"
+                         readonly="readonly" aria-haspopup="true" style="width: 100%;" ng-model="addcaseTypeName">
+                        <!-- readonly="readonly" aria-haspopup="true" ng-model="addRow.court_id_text"> -->
+                        <ul class="dropdown-menu" aria-labelledby="dropdownMenu1">
+                            <li ng-repeat="item in caseTypeArr" ng-click="addCaseTypeClic(item)">
+                                <a href="javascript:void(0)">{{item.caseTypeName}}</a></li>
+                        </ul>
+                        <span class="input-group-addon" data-toggle="dropdown" aria-haspopup="true" style="display: none"
+                            aria-expanded="false"><span class="caret"></span></span>
+                    </div>
+                </div>
+            </div>
+            <div class="form-group">
+                <label class="control-label col-xs-5">审判程序：</label>
+                <div class="row-180">
+                    <div class="input-group col-xs-12 input-group-sm">
+                        <input type="text" placeholder="请选择" class="form-control addInput_spcx"  data-toggle="dropdown"
+                        readonly="readonly" aria-haspopup="true" style="width: 100%;" ng-model="addspcxName">
+                            <!-- readonly="readonly" aria-haspopup="true" ng-model="addRow.court_room_id_text"> -->
+                        <ul class="dropdown-menu" aria-labelledby="dropdownMenu1">
+                            <li ng-repeat="item in spcxArr" ng-click="addSpcxClic(item)">
+                                <a href="javascript:void(0)">{{item.spcxName}}</a></li>
+                                    
+                        </ul>
+                        <span class="input-group-addon" data-toggle="dropdown" aria-haspopup="true" style="display: none"
+                            aria-expanded="false"><span class="caret"></span></span>
+                    </div>
+                </div>
+            </div>
+            <div class="form-group">
+                <label class="control-label col-xs-5"><em></em>所属卷：</label>
+                <div class="row-180">
+                    <div class="input-group col-xs-12 input-group-sm">
+                        <input type="text" placeholder="请选择" class="form-control addInput_rootDirectoryName" data-input="add_input" data-toggle="dropdown" 
+                            readonly="readonly" aria-haspopup="true" style="width: 100%;" ng-model="rootDirectoryName">
+                        <ul class="dropdown-menu addshj" aria-labelledby="dropdownMenu1">
+                            <li ng-repeat="item in rootdirectoryArr" ng-click="addrootDirectoryNameClic(item)">
+                                <a href="javascript:void(0)">{{item.directoryName}}</a></li>
+                        </ul>
+                        <span class="input-group-addon" data-toggle="dropdown" aria-haspopup="true" style="display: none"
+                            aria-expanded="false"><span class="caret"></span></span>
+                    </div>
+                    
+                </div>
+            </div>
+            <div class="form-group">
+                <label class="control-label col-xs-5"><em></em>目录：</label>
+                <div class="row-180">
+                    <div class="input-group col-xs-12 input-group-sm">
+                        <input type="text" placeholder="请选择" class="form-control addInput_directoryName" data-toggle="dropdown"
+                            readonly="readonly" aria-haspopup="true" style="width: 100%;" ng-model="directoryName">
+                        <ul class="dropdown-menu ztree" id="treeDemo" aria-labelledby="dropdownMenu1">
+
+                        </ul>
+                        <span class="input-group-addon" data-toggle="dropdown" aria-haspopup="true" style="display: none"
+                                aria-expanded="false"><span class="caret"></span></span>
+                    </div>
+                    
+                </div>
+            </div>
+            <div class="form-group">
+                <label class="control-label col-xs-5"><em></em>案件阶段：</label>
+                <div class="row-180">
+                    <div class="input-group col-xs-12 input-group-sm">
+                        <input type="text" placeholder="请选择" class="form-control ajjd_input" data-toggle="dropdown"
+                            readonly="readonly" aria-haspopup="true" style="width: 100%;" ng-model="ajjdName">
+
+                        <ul class="dropdown-menu ajjd_ul" aria-labelledby="dropdownMenu1">
+                                <li ng-repeat="item in ajjdArr" ng-click="ajjdClic(item)"><a
+                                    href="#">{{item.ajjdName}}</a></li>
+                        </ul>
+                        <span class="input-group-addon" data-toggle="dropdown" aria-haspopup="true" style="display: none"
+                            aria-expanded="false"><span class="caret"></span></span>
+                    </div>
+                </div>
+            </div>
+            <div class="form-group text-center" style="margin-bottom: 0;width: 95%;margin-top: 15px;">
+                <button class="btn btn-info btn-sm b_60px" ng-click="saveAdd()" style="margin-left: 15px">保存</button>
+                <button class="btn btn-info btn-sm b_60px" ng-click="cancelsaveUser()"
+                    style="margin-left: 15px">取消</button>
+            </div>
+        </form>
+    </div>
+
+    <div id="scopeJsForm" style="padding: 10px;float: left;width: 100%;display: none">
+        <form name="myForm-add">
+            <div class="form-group">
+                <label class="control-label col-xs-5">角色名称111：</label>
+                <div class="row-180">
+                    <div class="input-group col-xs-12 input-group-sm">
+                        <input type="text" placeholder="请输入" style="width: 95%" class="form-control"
+                            data-toggle="dropdown" aria-haspopup="true" ng-model="addRow.court_id_text">
+                        <!-- <div class="input-group col-xs-12 input-group-sm">
+                        <input type="text" placeholder="请选择" class="form-control" data-toggle="dropdown"
+                            readonly="readonly" aria-haspopup="true" ng-model="addRow.court_id_text"> -->
+
+                        <!-- <ul class="dropdown-menu" aria-labelledby="dropdownMenu1">
+                            <li><a href="javascript:void(0)" ng-repeat="item in courtList"
+                                    ng-click="_selCourtId(item)">{{item.court_name}}</a></li>
+                        </ul> -->
+                        <!-- <span class="input-group-addon" data-toggle="dropdown" aria-haspopup="true"
+                            aria-expanded="false"><span class="caret"></span></span> -->
+                    </div>
+                </div>
+            </div>
+            <div class="form-group">
+                <label class="control-label col-xs-5">角色权限：</label>
+                <div class="row-180">
+                    <div class="input-group col-xs-12 input-group-sm">
+                        <input type="text" placeholder="请选择" class="form-control" data-toggle="dropdown"
+                            readonly="readonly" aria-haspopup="true" ng-model="addRow.court_room_id_text">
+
+                        <ul class="dropdown-menu" aria-labelledby="dropdownMenu1">
+                            <li><a href="javascript:void(0)" ng-repeat="item in courtroomList"
+                                    ng-click="_selCourtRoom(item)">{{item.court_room_name}}</a></li>
+                        </ul>
+                        <span class="input-group-addon" data-toggle="dropdown" aria-haspopup="true"
+                            aria-expanded="false"><span class="caret"></span></span>
+                    </div>
+                </div>
+            </div>
+            <div class="form-group">
+                <label class="control-label col-xs-5"><em></em>角色描述：</label>
+                <div class="row-180">
+                    <textarea rows="4" cols="30" class="form-control col-xs-8" type="text"></textarea>
+                </div>
+            </div>
+            <div class="form-group">
+                <label class="control-label col-xs-5"><em></em>权限描述：</label>
+                <div class="row-180">
+                    <textarea rows="4" cols="30" class="form-control col-xs-8" type="text"></textarea>
+                </div>
+            </div>
+            <div class="form-group text-center" style="margin-bottom: 0;width: 95%;margin-top: 15px;">
+                <button class="btn btn-info btn-sm b_60px" ng-click="saveUser()" style="margin-left: 15px">保存</button>
+                <button class="btn btn-info btn-sm b_60px" ng-click="cancelsaveUser()"
+                    style="margin-left: 15px">取消</button>
+            </div>
+        </form>
+    </div>
+    <!-- 目录规则修改 -->
+    <div id="editForm" style="padding: 10px;float: left;width: 100%;display: none;overflow: hidden">
+        <form name="myForm-edit">
+            <div class="form-group">
+                <label class="control-label col-xs-5">案件类型：</label>
+                <div class="row-180">
+                    <div class="input-group col-xs-12 input-group-sm">
+                        <input type="text" placeholder="请选择" class="form-control edit_caseType" data-toggle="dropdown" style="width: 100%;"
+                            readonly="readonly" aria-haspopup="true" ng-model="editParam.caseTypeName">
+                            <ul class="dropdown-menu" aria-labelledby="dropdownMenu1">
+                                    <li ng-repeat="item in caseTypeArr" ng-click="editCaseTypeClic(item)">
+                                        <a href="javascript:void(0)">{{item.caseTypeName}}</a></li>
+                            </ul>
+                        <span class="input-group-addon" data-toggle="dropdown" aria-haspopup="true" style="display: none"
+                            aria-expanded="false"><span class="caret"></span></span>
+                    </div>
+                </div>
+            </div>
+            <div class="form-group">
+                <label class="control-label col-xs-5">审判程序：</label>
+                <div class="row-180">
+                    <div class="input-group col-xs-12 input-group-sm">
+                        <input type="text" placeholder="请选择" class="form-control editInput_spcx" data-input="edit_input" data-toggle="dropdown" style="width: 100%;"
+                            readonly="readonly" aria-haspopup="true" ng-model="editParam.spcxName">
+                            <ul class="dropdown-menu" aria-labelledby="dropdownMenu1">
+                                    <li ng-repeat="item in spcxArr" ng-click="editSpcxClic(item)">
+                                        <a href="javascript:void(0)">{{item.spcxName}}</a></li>
+                            </ul>
+                        <span class="input-group-addon" data-toggle="dropdown" aria-haspopup="true" style="display: none"
+                            aria-expanded="false"><span class="caret"></span></span>
+                    </div>
+                </div>
+            </div>
+            <div class="form-group">
+                <label class="control-label col-xs-5"><em></em>所属卷：</label>
+                <div class="row-180">
+                   <div class="input-group col-xs-12 input-group-sm">
+                        <input type="text" placeholder="请选择" class="form-control addInput_rootDirectoryName" data-toggle="dropdown" style="width: 100%;"
+                            readonly="readonly" aria-haspopup="true" ng-model="editParam.rootDirectoryName">
+                        <ul class="dropdown-menu" aria-labelledby="dropdownMenu1" style="height:115px;">
+                            <li ng-repeat="item in rootdirectoryArr" ng-click="addrootDirectoryNameClic(item)">
+                                <a href="javascript:void(0)">{{item.directoryName}}</a></li>
+                        </ul>
+                        <span class="input-group-addon" data-toggle="dropdown" aria-haspopup="true" style="display: none"
+                            aria-expanded="false"><span class="caret"></span></span>
+                    </div>
+                </div>
+            </div>
+            <div class="form-group">
+                <label class="control-label col-xs-5"><em></em>目录：</label>
+                <div class="row-180">
+                        <div class="input-group col-xs-12 input-group-sm">
+                                <input type="text" placeholder="请选择" class="form-control addInput_directoryName" data-toggle="dropdown" style="width: 100%;"
+                                    readonly="readonly" aria-haspopup="true" ng-model="editParam.directoryName">
+                                <ul class="dropdown-menu ztree" id="edit_treeDemo" aria-labelledby="dropdownMenu1" >
+        
+                                </ul>
+                                <span class="input-group-addon" data-toggle="dropdown" aria-haspopup="true" style="display: none"
+                                        aria-expanded="false"><span class="caret"></span></span>
+                            </div>
+                    
+                </div>
+            </div>
+            <div class="form-group">
+                <label class="control-label col-xs-5"><em></em>案件阶段：</label>
+                <div class="row-180">
+                    <div class="input-group col-xs-12 input-group-sm">
+                        <!-- <input type="text" placeholder="请输入" class="form-control" data-toggle="dropdown" style="width: 100%;"
+                            readonly="readonly" aria-haspopup="true" ng-model="editParam.ajjdName">
+                        <ul class="dropdown-menu b_ul_menu">
+                            <li ng-repeat="item in ajjdArr" ng-click="editAjjdClic(item)"><a
+                                href="#">{{item.ajjdName}}</a></li>
+                        </ul> -->
+                        <input type="text" placeholder="请选择" class="form-control ajjd_input" data-toggle="dropdown"
+                            readonly="readonly" aria-haspopup="true" style="width: 100%;" ng-model="editParam.ajjdName">
+
+                        <ul class="dropdown-menu" aria-labelledby="dropdownMenu1" style="height: 70px;">
+                                <li ng-repeat="item in ajjdArr" ng-click="editAjjdClic(item)"><a
+                                    href="#">{{item.ajjdName}}</a></li>
+                        </ul>
+                        <span class="input-group-addon" data-toggle="dropdown" aria-haspopup="true"  style="display: none"
+                            aria-expanded="false"><span class="caret"></span></span>
+                    </div>
+                </div>
+            </div>
+            <div class="form-group text-center" style="margin-bottom: 0;width: 95%;margin-top: 10px;">
+                <button class="btn btn-info btn-sm b_60px" ng-click="saveEdit()" style="margin-left: 15px">保存</button>
+                <button class="btn btn-info btn-sm b_20px" ng-click="cancelsaveUser()"
+                    style="margin-left: 15px">取消</button>
+            </div>
+        </form>
+    </div>
+
+    <div id="editJsForm" style="padding: 10px;float: left;width: 100%;display: none">
+        <form name="jsForm-add">
+            <div class="form-group">
+                <label class="control-label col-xs-5">角色名称：</label>
+                <div class="row-180">
+                    <div class="input-group col-xs-12 input-group-sm">
+                        <input type="text" placeholder="请输入" class="form-control" style="width: 95%"
+                            data-toggle="dropdown" aria-haspopup="true" ng-model="addRow.court_id_text">
+                    </div>
+                </div>
+            </div>
+            <div class="form-group">
+                <label class="control-label col-xs-5">角色权限：</label>
+                <div class="row-180">
+                    <div class="input-group col-xs-12 input-group-sm">
+                        <input type="text" placeholder="请选择" class="form-control" data-toggle="dropdown"
+                            readonly="readonly" aria-haspopup="true" ng-model="addRow.court_room_id_text">
+
+                        <ul class="dropdown-menu" aria-labelledby="dropdownMenu1">
+                            <li><a href="javascript:void(0)" ng-repeat="item in courtroomList"
+                                    ng-click="_selCourtRoom(item)">{{item.court_room_name}}</a></li>
+                        </ul>
+                        <span class="input-group-addon" data-toggle="dropdown" aria-haspopup="true"
+                            aria-expanded="false"><span class="caret"></span></span>
+                    </div>
+                </div>
+            </div>
+            <div class="form-group">
+                <label class="control-label col-xs-5"><em></em>角色描述：</label>
+                <div class="row-180">
+                    <textarea rows="4" cols="30" class="form-control col-xs-8" type="text"></textarea>
+                </div>
+            </div>
+            <div class="form-group">
+                <label class="control-label col-xs-5"><em></em>权限描述：</label>
+                <div class="row-180">
+                    <textarea rows="4" cols="30" class="form-control col-xs-8" type="text"></textarea>
+                </div>
+            </div>
+            <div class="form-group text-center" style="margin-bottom: 0;width: 95%;margin-top: 15px;">
+                <button class="btn btn-info btn-sm b_60px" ng-click="saveUser()" style="margin-left: 15px">保存</button>
+                <button class="btn btn-info btn-sm b_60px" ng-click="cancelsaveUser()"
+                    style="margin-left: 15px">取消</button>
+            </div>
+        </form>
+    </div>
+
+    <div id="delForm" style="padding: 10px;float: left;width: 100%;display: none">
+        <form name="myForm">
+            <div class="form-group" style="text-align: center;font-size: 16px;margin-top: 5px">
+                确认删除?
+            </div>
+            <div class="form-group text-center" style="margin-top: 10px;margin-bottom: 0;width: 95%;">
+
+                <button class="btn btn-info btn-sm b_20px" ng-click="_userdel()"
+                    style="width:100px;margin-left: 15px">确定</button>
+                <button class="btn btn-info btn-sm b_20px" ng-click="canceldeluser()"
+                    style="width:100px;margin-left: 15px">取消</button>
+            </div>
+
+        </form>
+    </div>
+    <my-pager ng-show="true"></my-pager>
+</body>
+<script type="text/javascript" src="../../plugin/jquery/jquery.min.js"></script>
+<script type="text/javascript" src="../../plugin/jquery/jquery.validate.js"></script>
+<script type="text/javascript" src="../../plugin/jquery/messages_zh.js"></script>
+<script type="text/javascript" src="../../plugin/angular/angular.min.js"></script>
+<script type="text/javascript" src="../../plugin/angular/angular-ui-router.min.js"></script>
+<script type="text/javascript" src="../../plugin/angular/angular-sanitize.min.js"></script>
+<script type="text/javascript" src="../../plugin/bootstrap/js/bootstrap.min.js"></script>
+<script type="text/javascript" src="../../plugin/easyui/jquery.easyui.min.js"></script>
+<script type="text/javascript" src="../../js/app_directives.js"></script>
+<script type="text/javascript" src="../../js/app_controllers.js"></script>
+<script type="text/javascript" src="../../js/app_services.js"></script>
+<script type="text/javascript" src="../../plugin/layer/layer.min.js"></script>
+<script src="../../plugin/zTree3/js/jquery.ztree.all.min.js"></script>
+<script type="text/javascript" src="./js/columnsData.js"></script>
+<script type="text/javascript" src="./js/page.js"></script>
+
+</html>

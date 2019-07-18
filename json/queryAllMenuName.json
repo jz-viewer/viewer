@@ -1,0 +1,23 @@
+{
+    "code": "0",
+    "message": "Success",
+    "total": null,
+    "data": [
+        {
+            "menuId": 1,
+            "menuName": "巡查视角"
+        },
+        {
+            "menuId": 2,
+            "menuName": "本院视角"
+        },
+        {
+            "menuId": 3,
+            "menuName": "庭长视角"
+        },
+        {
+            "menuId": 4,
+            "menuName": "法官视角"
+        }
+    ]
+}

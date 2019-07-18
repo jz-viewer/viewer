@@ -1,0 +1,657 @@
+<html>
+<head>
+    <meta charset="utf-8"/>
+    <title>图片组件</title>
+
+    <link rel="stylesheet" href="../../plugin/easyui/easyui.css"/>
+    <link rel="stylesheet" href="../../plugin/bootstrap/css/bootstrap.min.css"/>
+    <link rel="stylesheet" href="../../plugin/bootstrap/css/font-awesome.min.css"/>
+    <link rel="stylesheet" href="../../plugin/bootstrap/css/animate.css"/>
+    <link rel="stylesheet" href="../../css/basic.css"/>
+
+
+    <script type="text/javascript" src="../../plugin/jquery/jquery.min.js"></script>
+
+    <script type="text/javascript" src="js/jcanvas.min.js"></script>
+
+    <script>
+        var layer=0;
+        //数据传输
+        var DataTrans = function () {
+            this.filelist = [
+                {
+                    type:"img",
+                    url:"http://192.168.0.30:8088/court/bjcaseInfo/putFile?fileId=2018944318233700&subCaseId=11083315742277321",
+                }
+            ];
+        }
+        DataTrans.prototype = {
+            _init: function () {
+                
+            }
+        }
+
+        //页面数据操作
+        var DataDom = {
+
+        }
+        //页面样式操作
+        var StyleCla = {
+
+        }
+        StyleCla.prototype = {
+
+        }
+        //操作按键及绑定
+        var ToolBtn = function(){
+            this.btns = [];
+            this.eventBind = new EventBind();
+
+            this.drawStatus = 0;
+        }
+        ToolBtn.prototype = {
+            addBtn: function () {
+                //创建button对象
+            },
+            addBtnTo: function () {
+                //创建button对象，并加入dom对象
+            },
+            rmBtn: function () {
+                //删除button对象
+            },
+            rmBtnFrom: function () {
+                //删除button对象，同时从dom对象中删除
+            },
+            appendTo: function () {
+                //加入dom对象
+            },
+            rmFrom: function () {
+                //从dom对象中删除
+            },
+            bindFunc: function () {
+                //为btn绑定操作
+            },
+            drawBtn: function () {
+                var toolBtn = this;
+                //图片圈注按钮
+                var $squareBtn = $("<button class='tool-button'><i class=\"fa fa-square-o\" aria-hidden=\"true\"></i></button>");
+                var $circleBtn = $("<button class='tool-button'><i class=\"fa fa-circle-o\" aria-hidden=\"true\"></i></button>");
+                var $fontBtn = $("<button class='tool-button'><i class=\"fa fa-font\" aria-hidden=\"true\"></i></button>");
+
+                $squareBtn.appendTo($(".picbox-tool"));
+                $squareBtn.bind("click", function () {
+                    if(toolBtn.drawStatus==1){
+                        //取消画方形图
+                        toolBtn.eventBind.outDraw();
+                        $squareBtn.css({
+                            backgroundColor:"",
+                        });
+                        toolBtn.drawStatus=0;
+                    }else {
+                        //取消画图状态
+                        toolBtn.eventBind.outDraw();
+                        $(".tool-button").css({
+                            backgroundColor:'',
+                        });
+                        //开始画方形图
+                        toolBtn.eventBind.inDrawRect();
+                        $squareBtn.css({
+                            backgroundColor:'#Abc',
+                        });
+                        toolBtn.drawStatus=1;
+                    }
+                });
+                $circleBtn.appendTo($(".picbox-tool"));
+                $circleBtn.bind("click", function () {
+                    if(toolBtn.drawStatus==2){
+                        toolBtn.eventBind.outDraw();
+                        $circleBtn.css({
+                            backgroundColor:"",
+                        });
+                        toolBtn.drawStatus=0;
+                    }else {
+                        //取消画图状态
+                        toolBtn.eventBind.outDraw();
+                        $(".tool-button").css({
+                            backgroundColor:'',
+                        });
+                        //开始画椭圆图
+                        toolBtn.eventBind.inDrawEllipse();
+                        toolBtn.drawIng=true;
+                        $circleBtn.css({
+                            backgroundColor:'#Abc',
+                        });
+                        toolBtn.drawStatus=2;
+                    }
+                });
+                $fontBtn.appendTo($(".picbox-tool"));
+                $fontBtn.bind("click", function () {
+                    if(toolBtn.drawStatus==3){
+                        toolBtn.eventBind.outDraw();
+                        $fontBtn.css({
+                            backgroundColor:"",
+                        });
+                        toolBtn.drawStatus=0;
+                    }else {
+                        //取消画图状态
+                        toolBtn.eventBind.outDraw();
+                        $(".tool-button").css({
+                            backgroundColor:'',
+                        });
+
+                        toolBtn.eventBind.inDrawText();
+                        toolBtn.drawIng=true;
+                        $fontBtn.css({
+                            backgroundColor:'#Abc',
+                        });
+                        toolBtn.drawStatus=3;
+                    }
+                });
+            }
+        }
+        //响应动作
+        var EventBind = function(){
+            this.canvasExt = new CanvasExt();
+            this.canvasExt._init();
+        }
+        EventBind.prototype={
+            inDrawRect: function () {
+                var eventBind = this;
+                var color = "red";
+                var width = 1;
+                eventBind.canvasExt.drawRect(eventBind.canvasExt.canvasId, color, width);
+            },
+            inDrawEllipse:function () {
+                var eventBind = this;
+                var color = "red";
+                var width = 1;
+                eventBind.canvasExt.drawEllipse(eventBind.canvasExt.canvasId, color, width);
+            },
+            inDrawText:function () {
+                var eventBind = this;
+                var color = "red";
+                var width = 1;
+                eventBind.canvasExt.drawText(eventBind.canvasExt.canvasId, color, width);
+            },
+            outDraw: function () {
+                var eventBind = this;
+                eventBind.canvasExt.cancelDraw(eventBind.canvasExt.canvasId);
+            }
+        }
+        //画板操作
+        var CanvasExt = function () {
+            this.parentId = "painter"
+            this.canvasId="canvas";
+
+            this.$canvas = $("#canvas");
+
+            this.setting ={
+                cwidth : 600,
+                cheight : 300,
+                imgwidth : 600,
+                imgheight : 300,
+                x : 0,
+                y : 0,
+            }
+        }
+        CanvasExt.prototype = {
+            _init: function (canvasId, parentId, imgId) {
+                var canvasExt = this;
+                if(canvasId){
+                    this.canvasId=canvasId;
+                }
+                if(parentId){
+                    this.parentId=parentId;
+                }
+                this.$canvas = $("#"+this.canvasId);
+                if(canvasExt.$canvas.length==0){
+                    canvasExt.$canvas = $("<canvas id='"+canvasExt.canvasId+"' width='"+canvasExt.setting.cwidth+"' height='"+canvasExt.setting.cheight+"' style='border: 0.5px solid #000;'></canvas>");
+                    $("#"+this.parentId).append(this.$canvas);
+                }
+
+                if($("#"+imgId).length>0){
+                    canvasExt.loadImgDom("");
+                }else {
+                    canvasExt.loadImgUrl();
+                }
+            },
+            _set: function (cwidth, cheight, imgwidth, imgheight) {
+                var canvasExt = this;
+                canvasExt.setting.cwidth = cwidth;
+                canvasExt.setting.cheight = cheight;
+                canvasExt.setting.imgwidth = imgwidth;
+                canvasExt.setting.imgheight = imgheight;
+            },
+            loadImgUrl: function (url) {
+                var canvasExt = this;
+                canvasExt.$canvas.addLayer({
+                    type: 'image',
+                    source: '../../model/dragl/static/dossierChange/img/2278360532034708.jpg',
+                    x: canvasExt.setting.x,
+                    y: canvasExt.setting.y,
+                    width: canvasExt.setting.cwidth,
+                    height: canvasExt.setting.cheight,
+                    fromCenter: false
+                }).drawLayers();
+            },
+            loadImgDom: function (canvasId, imgId) {
+                $("#"+canvasId).drawImage({
+                    source: $("#"+imgId)[0],
+                    x: canvasExt.setting.x,
+                    y: canvasExt.setting.y,
+                    width: canvasExt.setting.cwidth,
+                    height: canvasExt.setting.cheight,
+                    fromCenter: false
+                });
+            },
+            drawRect:function(canvasId,penColor,strokeWidth){
+                var that=this;
+                that.penColor=penColor;
+                that.penWidth=strokeWidth;
+
+                var canvas=$("#"+canvasId)[0];
+
+                //canvas 的矩形框
+                var canvasRect = canvas.getBoundingClientRect();
+                //矩形框的左上角坐标
+                var canvasLeft=canvasRect.left;
+                var canvasTop=canvasRect.top;
+
+                var layerIndex=layer;
+                var layerName="layer";
+                var x=0;
+                var y=0;
+
+                //鼠标点击按下事件，画图准备
+                canvas.onmousedown=function(e){
+                    //设置画笔颜色和宽度
+                    var color=that.penColor;
+                    var penWidth=that.penWidth;
+
+                    layerIndex++;
+                    layer++;
+                    layerName+=layerIndex;
+                    x = e.clientX-canvasLeft;
+                    y = e.clientY-canvasTop;
+
+                    $("#"+canvasId).addLayer({
+                        type: 'rectangle',
+                        strokeStyle: color,
+                        strokeWidth: penWidth,
+                        name:layerName,
+                        fromCenter: false,
+                        x: x, y: y,
+                        width: 1,
+                        height: 1
+                    });
+
+                    $("#"+canvasId).drawLayers();
+                    $("#"+canvasId).saveCanvas();
+                    //鼠标移动事件，画图
+                    canvas.onmousemove=function(e){
+                        width = e.clientX-canvasLeft-x;
+                        height = e.clientY-canvasTop-y;
+
+                        $("#"+canvasId).removeLayer(layerName);
+
+                        $("#"+canvasId).addLayer({
+                            type: 'rectangle',
+                            strokeStyle: color,
+                            strokeWidth: penWidth,
+                            name:layerName,
+                            fromCenter: false,
+                            x: x, y: y,
+                            width: width,
+                            height: height
+                        });
+
+                        $("#"+canvasId).drawLayers();
+                    }
+                };
+
+                canvas.onmouseup=function(e){
+
+                    var color=that.penColor;
+                    var penWidth=that.penWidth;
+
+                    canvas.onmousemove=null;
+
+                    width = e.clientX-canvasLeft-x;
+                    height = e.clientY-canvasTop-y;
+
+                    $("#"+canvasId).removeLayer(layerName);
+
+                    $("#"+canvasId).addLayer({
+                        type: 'rectangle',
+                        strokeStyle: color,
+                        strokeWidth: penWidth,
+                        name:layerName,
+                        fromCenter: false,
+                        x: x, y: y,
+                        width: width,
+                        height: height,
+                    });
+
+                    $("#"+canvasId).drawLayers();
+                    $("#"+canvasId).saveCanvas();
+                }
+            },
+            drawEllipse:function (canvasId,penColor,strokeWidth) {
+                var that=this;
+                that.penColor=penColor;
+                that.penWidth=strokeWidth;
+
+                var canvas=$("#"+canvasId)[0];
+
+                //canvas 的矩形框
+                var canvasRect = canvas.getBoundingClientRect();
+                //矩形框的左上角坐标
+                var canvasLeft=canvasRect.left;
+                var canvasTop=canvasRect.top;
+
+                var layerIndex=layer;
+                var layerName="layer";
+                var x=0;
+                var y=0;
+
+                //鼠标点击按下事件，画图准备
+                canvas.onmousedown=function(e){
+                    //设置画笔颜色和宽度
+                    var color=that.penColor;
+                    var penWidth=that.penWidth;
+
+                    layerIndex++;
+                    layer++;
+                    layerName+=layerIndex;
+                    x = e.clientX-canvasLeft;
+                    y = e.clientY-canvasTop;
+
+                    $("#"+canvasId).addLayer({
+                        type: 'ellipse',
+                        strokeStyle: color,
+                        strokeWidth: penWidth,
+                        name:layerName,
+                        fromCenter: false,
+                        x: x, y: y,
+                        width: 1,
+                        height: 1
+                    });
+
+                    $("#"+canvasId).drawLayers();
+                    $("#"+canvasId).saveCanvas();
+                    //鼠标移动事件，画图
+                    canvas.onmousemove=function(e){
+                        width = e.clientX-canvasLeft-x;
+                        height = e.clientY-canvasTop-y;
+
+                        $("#"+canvasId).removeLayer(layerName);
+
+                        $("#"+canvasId).addLayer({
+                            type: 'ellipse',
+                            strokeStyle: color,
+                            strokeWidth: penWidth,
+                            name:layerName,
+                            fromCenter: false,
+                            x: x, y: y,
+                            width: width,
+                            height: height
+                        });
+
+                        $("#"+canvasId).drawLayers();
+                    }
+                };
+
+                canvas.onmouseup=function(e){
+
+                    var color=that.penColor;
+                    var penWidth=that.penWidth;
+
+                    canvas.onmousemove=null;
+
+                    width = e.clientX-canvasLeft-x;
+                    height = e.clientY-canvasTop-y;
+
+                    $("#"+canvasId).removeLayer(layerName);
+
+                    $("#"+canvasId).addLayer({
+                        type: 'ellipse',
+                        strokeStyle: color,
+                        strokeWidth: penWidth,
+                        name:layerName,
+                        fromCenter: false,
+                        x: x, y: y,
+                        width: width,
+                        height: height,
+                    });
+
+                    $("#"+canvasId).drawLayers();
+                    $("#"+canvasId).saveCanvas();
+                }
+            },
+            drawText:function (canvasId,penColor,strokeWidth) {
+                var that=this;
+                that.penColor=penColor;
+                that.penWidth=strokeWidth;
+
+                var canvas=$("#"+canvasId)[0];
+
+                //canvas 的矩形框
+                var canvasRect = canvas.getBoundingClientRect();
+                //矩形框的左上角坐标
+                var canvasLeft=canvasRect.left;
+                var canvasTop=canvasRect.top;
+
+                var layerIndex=layer;
+                var layerName="layer";
+                var x=0;
+                var y=0;
+
+
+                //鼠标点击按下事件，画图准备
+                canvas.onmousedown=function(e){
+                    //设置画笔颜色和宽度
+                    var color=that.penColor;
+                    var penWidth=that.penWidth;
+
+                    layerIndex++;
+                    layer++;
+                    layerName+=layerIndex;
+                    x = e.clientX-canvasLeft;
+                    y = e.clientY-canvasTop;
+
+                    $("#"+canvasId).addLayer({
+                        type: 'rectangle',
+                        strokeStyle: color,
+                        strokeWidth: penWidth,
+                        name:layerName,
+                        fromCenter: false,
+                        x: x, y: y,
+                        width: 1,
+                        height: 1
+                    });
+
+                    $("#"+canvasId).drawLayers();
+                    $("#"+canvasId).saveCanvas();
+                    //鼠标移动事件，画图
+                    canvas.onmousemove=function(e){
+                        width = e.clientX-canvasLeft-x;
+                        height = e.clientY-canvasTop-y;
+
+                        $("#"+canvasId).removeLayer(layerName);
+
+                        $("#"+canvasId).addLayer({
+                            type: 'rectangle',
+                            strokeStyle: color,
+                            strokeWidth: penWidth,
+                            name:layerName,
+                            fromCenter: false,
+                            x: x, y: y,
+                            width: width,
+                            height: height
+                        });
+
+                        $("#"+canvasId).drawLayers();
+                    }
+                };
+
+                canvas.onmouseup=function(e){
+
+                    var color=that.penColor;
+                    var penWidth=that.penWidth;
+
+                    canvas.onmousemove=null;
+
+                    width = e.clientX-canvasLeft-x;
+                    height = e.clientY-canvasTop-y;
+
+                    $("#"+canvasId).removeLayer(layerName);
+
+                    $("#"+canvasId).drawLayers();
+
+                    $("#fontEdit").css({
+                        display:"block",
+                        left:canvasLeft+x,
+                        top:canvasTop+y,
+                        width:width,
+                        height:height,
+                    });
+                    $("#fontEdit").find("span").innerText="";
+                    $("#fontEdit").find("span").focus();
+                    $("#fontEdit").find("span").bind("blur", function () {
+                        var text = this.innerText;
+
+                        $("#"+canvasId).addLayer({
+                            type: 'text',
+                            strokeStyle: color,
+                            strokeWidth: penWidth,
+                            name:layerName,
+                            text:text,
+                            fromCenter: false,
+                            x: x, y: y,
+                            width: width,
+                            height: height,
+                            dblclick: function (layer) {
+                                $("#"+canvasId).removeLayer(layer.name);
+                                $("#"+canvasId).drawLayers();
+                                $("#fontEdit").css({
+                                    display:"block",
+                                    left:canvasLeft+x,
+                                    top:canvasTop+y,
+                                    width:width,
+                                    height:height,
+                                });
+                                $("#fontEdit").find("span").innerText=layer.text;
+                                $("#sharpEdit").css({
+                                    display:"block",
+                                    left:canvasLeft+x+width,
+                                    top:canvasTop+y,
+                                });
+                                $("#remove").bind("click", function () {
+                                    $("#fontEdit").css({
+                                        display:"none",
+                                    });
+                                    $("#sharpEdit").css({
+                                        display:"none",
+                                    });
+                                });
+
+                                $("#"+canvasId).saveCanvas();
+                            }
+                        });
+                        $("#"+canvasId).drawLayers();
+                        $("#"+canvasId).saveCanvas();
+
+                        $("#fontEdit").css({
+                            display:"none",
+                        });
+                    });
+                }
+            },
+            cancelDraw:function (canvasId) {
+
+                var canvas=$("#"+canvasId)[0];
+                canvas.onmousedown=null;
+                canvas.onmouseup=null;
+            }
+        }
+
+        $(function(){
+
+
+            $.toolBtn = new ToolBtn();
+            $.toolBtn.drawBtn();
+
+            $.canvasExt = new CanvasExt();
+            $.canvasExt._init("canvas", "canvasBox");
+        });
+    </script>
+    <style type="text/css">
+        .picbox {
+            overflow: hidden;
+            text-align: left;
+            margin: 0;
+            border: 0;
+            -moz-border-radius: 0 0 0 0;
+            -webkit-border-radius: 0 0 0 0;
+            border-radius: 0 0 0 0;
+        }
+        .picbox-header {
+            background-color: #F2F2F2;
+            background: -webkit-linear-gradient(top,#ffffff 0,#F2F2F2 100%);
+            background: -moz-linear-gradient(top,#ffffff 0,#F2F2F2 100%);
+            background: -o-linear-gradient(top,#ffffff 0,#F2F2F2 100%);
+            background: linear-gradient(to bottom,#ffffff 0,#F2F2F2 100%);
+            background-repeat: repeat-x;
+            filter: progid:DXImageTransform.Microsoft.gradient(startColorstr=#ffffff,endColorstr=#F2F2F2,GradientType=0);
+
+            padding: 5px;
+            height: 30px;
+            position: relative;
+        }
+        .picbox-header,
+        .picbox-body {
+            border-color: #D4D4D4;
+
+            border-width: 1px;
+            border-style: solid;
+        }
+
+        .picbox-tool {
+            left:30px;
+        }
+
+        .tool-button {
+            display: inline-block;
+            width: 40px;
+            height: 24px;
+            margin: 0;
+            padding: 2px;
+            border-width: 0;
+            border-radius: 0;
+            text-align: center;
+            font-size: 14px;
+            background: none;
+            color: #ccc;
+            cursor: pointer;
+            outline: none;
+            -webkit-box-sizing: border-box;
+            box-sizing: border-box;
+        }
+    </style>
+</head>
+<body>
+    <div class="panel">
+        <div class="picbox-header">
+            <div class="picbox-tool"></div>
+        </div>
+        <div id="canvasBox" class="panel-body" style="text-align:center;">
+            <div id="fontEdit" style="text-align: left;display:none;float: inherit;position: absolute;border: 0.5px dotted #000;">
+                <span style="text-align: left" contenteditable="true"></span>
+            </div>
+            <div id="sharpEdit" style="text-align: left;display:none;float: inherit;position: absolute;border: 0.5px dotted #000;">
+                <button id="remove"><i class="fa fa-times" aria-hidden="true"></i></button>
+            </div>
+        </div>
+    </div>
+</body>
+</html>

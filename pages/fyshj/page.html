@@ -1,0 +1,513 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>首页</title>
+    <link href="./imgs/favicon.ico" rel="shortcut icon" type="image/x-icon" />
+    <link rel="stylesheet" href="../../plugin/easyui/easyui.css" />
+    <link rel="stylesheet" href="../../plugin/zTree3/css/zTreeStyle/zTreeStyle.css" />
+    <link rel="stylesheet" href="../../plugin/layer/skin/layer.css" />
+    <link rel="stylesheet" href="../../plugin/bootstrap/css/bootstrap.min.css" />
+    <link rel="stylesheet" href="../../plugin/bootstrap/css/font-awesome.min.css" />
+    <link rel="stylesheet" href="../../plugin/bootstrap/css/animate.css" />
+    <link rel="stylesheet" href="../../plugin/datetimepicker/jquery.datetimepicker.css" type="text/css" />
+    <link rel="stylesheet" href="../../css/base.css">
+    <link rel="stylesheet" href="./css/page.css">
+</head>
+
+<body ng-app="myApp" ng-controller="appController" ng-cloak>
+    <div class="shijiao-boxs" ng-show='shijiaoShow'>
+        <div class="chshj">
+            <div class="top_content clearfix">
+                <div class="fl top_left_box">
+                    <div class="case_num">
+                        <span class="anjianshu_icon"></span>
+                        <span class="anjianshu_text first_text">案件数</span>
+                        <span class="anjianshu_num first_num xcanjianshu">{{xctongjiData.totalCaseCount}}</span>
+                    </div>
+                    <div class="case_num">
+                        <span class="yisaomiao_icon"></span>
+                        <span class="anjianshu_text">已扫描上传案件数</span>
+                        <span class="anjianshu_num xcsaomiaoshu">{{xctongjiData.totalUploadCaseCount}}</span>
+                    </div>
+                    <div class="case_num">
+                        <span class="shengcheng_icon"></span>
+                        <span class="anjianshu_text">随案生成批次</span>
+                        <span class="anjianshu_num xcshengchengshu">{{xctongjiData.totalUploadIndex}}</span>
+                    </div>
+                    <div class="case_num">
+                        <span class="shangchuan_icon"></span>
+                        <span class="anjianshu_text">扫描上传页数</span>
+                        <span class="anjianshu_num xcshangchuan">{{xctongjiData.totalFileNum}}</span>
+                    </div>
+                    <div class="case_num">
+                        <span class="buhege_icon"></span>
+                        <span class="anjianshu_text">不合格案件数量</span>
+                        <span class="anjianshu_num xcbuhege">{{xctongjiData.totalUnPassCaseCount}}</span>
+                    </div>
+                </div>
+                <div class="fl top_center_box">
+                    <div class="c_menu_box clearfix">
+                        <ul class="t_ul_menu chshj_t_ul_menu">
+                            <li class='fl active'>巡查视角</li>
+                            <li class='fl'>本院视角</li>
+                            <li class='fl'>庭长视角</li>
+                            <li class='fl'>法官视角</li>
+                        </ul>
+                        <div class="btn-group dropdown my-dropdown" id="dropdown">
+                            <input readonly="readonly" style="font-size: 12px;height: 34px;"
+                                class="btn my-btn-default btn-default dropdown-toggle" ng-model="timeScope"
+                                data-toggle="dropdown" placeholder="本月" aria-haspopup="true" aria-expanded="false">
+                            </input>
+                            <input type="hidden" name="hidedrop_1" id="hidedrop_1" value="本月" />
+                            <ul class="dropdown-menu b_ul_menu">
+                                <li><a ng-click="selectTime($event)" href="#">本月</a></li>
+                                <li><a ng-click="selectTime($event)" href="#">上月</a></li>
+                                <li><a ng-click="selectTime($event)" href="#">本周</a></li>
+                                <li><a ng-click="selectTime($event)" href="#">上周</a></li>
+                                <li><a ng-click="selectTime($event)" href="#">今天</a></li>
+                                <li><a ng-click="selectTime($event)" href="#">昨天</a></li>
+                                <li><a ng-click="selectTime($event)" href="#">近半年</a></li>
+                                <li><a ng-click="selectTime($event)" href="#">近一年</a></li>
+                                <li><a href="#" ng-click="timeZidingyi()">自定义</a></li>
+                            </ul>
+                        </div>
+                        <!-- <div class="btn-group dropdown my-dropdown" id="dropdown">
+                        <input class="date-time-picker form-control input-sm col-xs-12" type="text"
+                            plugintype="datetime" placeholder="" ng-model="param.laDateStart" id="startTime" />
+                    </div>
+                    <div class="btn-group dropdown my-dropdown" id="dropdown">
+                        <input class="date-time-picker form-control input-sm col-xs-12" type="text"
+                            plugintype="datetime" placeholder="" ng-model="param.laDateEnd" id="endTime" />
+                    </div> -->
+                        <div class="btn-group dropdown my-dropdown" style="display: none">
+                            <div class="btn my-btn-default btn-default dropdown-toggle"
+                                style="height:34;padding-left: 6px;">
+                                <div class="check-box" style="text-align: right;">
+                                </div>
+                                <ul id="regionZTree" class="ztree"></ul>
+                            </div>
+                        </div>
+                        <div class="btn-group dropdown my-dropdown fy-dropdown" id="dropdown1" style="display: none">
+                            <input readonly="readonly" type="input" id="fayuan_input" placeholder="全部地区"
+                                class="btn btn-default my-btn-default dropdown-toggle" data-toggle="dropdown"
+                                aria-haspopup="true" aria-expanded="false" />
+                            <input type="hidden" name="hidedrop_1" id="hidedrop_1" value="全部地区" />
+                            <!-- <div class="dropdown-menu b_ul_menu my_drop">
+                            <div class="tree_content">
+                            </div>
+                        </div> -->
+                        </div>
+                        <button class="btn btn-info btn-sm my-search" ng-click="search()">巡查</button>
+                    </div>
+                    <div class="c_center_box" style='position: relative;'>
+                        <p class="ckge-bychart1 xcckge-more" style="top: 10px;"><span
+                                onClick="xcchart1MoreClick()">查看更多</span></p>
+                        <!-- <span class="ckge-bychart1 xcckge-text" style="top: 10px;left:200px;"><span onClick="xcchart1MoreClick()">全部地区</span></p> -->
+                        <p class="ckge-bychart1 xcckge-more xcckge-fanhui" style="top: 10px;right: 0;left: 22px;"><span
+                                onClick="xcchart1MoreFhClick()">返回</span></p>
+                        <div id="chart1"></div>
+                        <div id="xc_chart1_more_form" style="padding: 10px;float: left;width: 100%;display: none">
+                            <form name="myForm">
+                                <div class="form-group text-center marauto" style="margin-top: 10px;margin-bottom: 0;">
+                                    <div id="xc_chart1_more"></div>
+                                </div>
+
+                            </form>
+                        </div>
+                    </div>
+                </div>
+                <div id="timeForm">
+                    <form name="myForm">
+                        <div class="group-row">
+                            <label class="control-label">起始时间 : &nbsp;</label>
+                            <div class="row-180">
+                                <input class="date-time-picker form-control input-sm col-xs-12" type="text"
+                                    plugintype="datetime" placeholder="" ng-model="param.laDateStart" id="startTime" />
+                            </div>
+                        </div>
+                        <div class="group-row">
+                            <label class="control-label">&nbsp;&nbsp;&nbsp; &nbsp;</label>
+                            <label class="control-label">结束时间 : &nbsp;</label>
+                            <div class="row-180">
+                                <input class="date-time-picker form-control input-sm col-xs-12" type="text"
+                                    plugintype="datetime" placeholder="" ng-model="param.laDateEnd" id="endTime" />
+                            </div>
+                        </div>
+                        <div class="group-row-btn">
+                            <button class="btn btn-info btn-sm b_20px" ng-click="saveTimeScope()"
+                                style="margin-left: 15px">确定</button>
+                        </div>
+                    </form>
+                </div>
+                <div class="fr top_right_box">
+                    <div id="chart2"></div>
+                    <div id="chart3"></div>
+                </div>
+            </div>
+            <div class="centet_content clearfix">
+                <div class="center_l_box fl">
+                    <div id="chart4"></div>
+                    <div id="chart5"></div>
+                </div>
+                <div class="center_c_box fl ">
+                    <P class="center_c_tilte">电子卷宗制作与质检情况排行榜</P>
+                    <div class="top_10_content">
+                        <P class="center_c_sub_tilte">电子卷宗制作数量排行榜</P>
+                        <ul class="top_10_ul">
+                            <li ng-repeat="item in xcTop10ZhizuoDatas track by $index"><span>{{$index+1}}</span><span
+                                    title="{{item.name}}">{{item.name}}</span><span
+                                    class="pull-right">{{item.value}}</span>
+                            </li>
+                        </ul>
+                    </div>
+                    <div class="top_10_content">
+                        <P class="center_c_sub_tilte">电子卷宗合格数量排行榜</P>
+                        <ul class="top_10_ul">
+                            <li ng-repeat="item in xcTop10JuanzongDatas track by $index"><span>{{$index+1}}</span><span
+                                    title="{{item.name}}">{{item.name}}</span><span
+                                    class="pull-right">{{item.value}}</span>
+                            </li>
+                        </ul>
+                    </div>
+                </div>
+                <div class="center_r_box fr">
+                    <div id="chart6"></div>
+                    <div id="chart7"></div>
+                </div>
+            </div>
+            <div class="bottom_content clearfix">
+                <div class="bottom_l_box fl">
+                    <P class="center_c_tilte">法院不合格案件数</P>
+                    <div class="clearfix scroll_head">
+                        <div class="pull-left">法院</div>
+                        <div class="pull-right">不合格数</div>
+                    </div>
+                    <div class="slider_box">
+                        <ul id="court_slider">
+                        </ul>
+                    </div>
+                </div>
+                <div class="bottom_c_box fl">
+                    <P class="center_c_tilte">问题案号<a href="###" style="color: #0293e6;
+                    cursor: pointer;font-size: 14px;" ng-click="ckquanbu()" class="pull-right">查看全部 >></a></P>
+                    <div class="clearfix scroll_head">
+                        <div class="pull-left">问题案号动态信息</div>
+                    </div>
+                    <div class="slider_box">
+                        <ul id="case_slider">
+                        </ul>
+                    </div>
+                </div>
+                <div class="bottom_r_box fr">
+                    <div id="chart8"></div>
+                </div>
+            </div>
+        </div>
+        <div class="byshj">
+            <div class="top_content clearfix">
+                <div class="fl top_left_box">
+                    <div class="case_num">
+                        <span class="anjianshu_icon"></span>
+                        <span class="anjianshu_text first_text">案件数</span>
+                        <span class="anjianshu_num first_num">{{byTongjiData.totalCaseCount}}</span>
+                    </div>
+                    <div class="case_num">
+                        <span class="yisaomiao_icon"></span>
+                        <span class="anjianshu_text">已扫描上传案件数</span>
+                        <span class="anjianshu_num">{{byTongjiData.totalUploadCaseCount}}</span>
+                    </div>
+                    <div class="case_num">
+                        <span class="shengcheng_icon"></span>
+                        <span class="anjianshu_text">随案生成批次</span>
+                        <span class="anjianshu_num">{{byTongjiData.totalUploadIndex}}</span>
+                    </div>
+                    <div class="case_num">
+                        <span class="shangchuan_icon"></span>
+                        <span class="anjianshu_text">扫描上传页数</span>
+                        <span class="anjianshu_num">{{byTongjiData.totalFileNum}}</span>
+                    </div>
+                    <div class="case_num">
+                        <span class="buhege_icon"></span>
+                        <span class="anjianshu_text">不合格案件数量</span>
+                        <span class="anjianshu_num">{{byTongjiData.totalUnPassCaseCount}}</span>
+                    </div>                                         
+                    <!-- <div class="case_num">
+                        <span class="plhedui_icon"></span>
+                        <span class="plhedui_text">待核实数量</span>
+                        <span class="plhedui_num">0</span>
+                    </div> -->
+                </div>
+                <div class="fl top_center_box">
+                    <div class="c_menu_box clearfix">
+                        <ul class="t_ul_menu by_t_ul_menu">
+                            <li class='fl'>巡查视角</li>
+                            <li class='fl active'>本院视角</li>
+                            <li class='fl'>庭长视角</li>
+                            <li class='fl'>法官视角</li>
+                        </ul>
+                    </div>
+                    <div class="c_center_box">
+                        <p class="ckge-bychart1"><span ng-click="bychart1MoreClick()">查看更多</span></p>
+                        <div id="by_chart1"></div>
+                        <div id="by_chart1_more_form" style="padding: 10px;float: left;width: 100%;display: none">
+                            <form name="myForm">
+                                <div class="form-group text-center marauto" style="margin-top: 10px;margin-bottom: 0;">
+                                    <div id="by_chart1_more"></div>
+                                </div>
+
+                            </form>
+                        </div>
+                    </div>
+                </div>
+                <div class="fr top_right_box">
+                    <div id="by_chart2"></div>
+                    <div id="by_chart3"></div>
+                </div>
+            </div>
+            <div class="centet_content clearfix">
+                <div class="center_l_box fl">
+                    <div id="by_chart4"></div>
+                    <div id="by_chart5"></div>
+                </div>
+                <div class="center_c_box fl ">
+                    <p class="center_c_tilte"> 电子卷宗制作与质检情况排行榜</p>
+                    <div class="top_10_content">
+                        <p class="center_c_sub_tilte">电子卷宗制作数量排行榜</p>
+                        <ul class="top_10_ul">
+                            <li ng-repeat="item in byTop10ZhizuoDatas track by $index"><span>{{$index+1}}</span><span
+                                    title="{{item.name}}">{{item.name}}</span><span
+                                    class="pull-right">{{item.value}}</span>
+                            </li>
+                        </ul>
+                    </div>
+                    <div class="top_10_content">
+                        <p class="center_c_sub_tilte"> 电子卷宗合格数量排行榜</p>
+                        <ul class="top_10_ul">
+                            <li ng-repeat="item in byTop10JuanzongDatas track by $index"><span>{{$index+1}}</span><span
+                                    title="{{item.name}}">{{item.name}}</span><span
+                                    class="pull-right">{{item.value}}</span>
+                            </li>
+                        </ul>
+                    </div>
+                </div>
+                <div class="center_r_box fr">
+                    <div id="by_chart6"></div>
+                </div>
+            </div>
+        </div>
+        <div class="tzshj">
+            <div class="top_content clearfix">
+                <div class="fl top_left_box">
+                    <div class="case_num">
+                        <span class="anjianshu_icon"></span>
+                        <span class="anjianshu_text first_text">案件数</span>
+                        <span class="anjianshu_num first_num">{{tzTongjiData.totalCaseCount}}</span>
+                    </div>
+                    <div class="case_num">
+                        <span class="yisaomiao_icon"></span>
+                        <span class="anjianshu_text">已扫描上传案件数</span>
+                        <span class="anjianshu_num">{{tzTongjiData.totalUploadCaseCount}}</span>
+                    </div>
+                    <div class="case_num">
+                        <span class="shengcheng_icon"></span>
+                        <span class="anjianshu_text">随案生成批次</span>
+                        <span class="anjianshu_num">{{tzTongjiData.totalUploadIndex}}</span>
+                    </div>
+                    <div class="case_num">
+                        <span class="shangchuan_icon"></span>
+                        <span class="anjianshu_text">扫描上传页数</span>
+                        <span class="anjianshu_num">{{tzTongjiData.totalFileNum}}</span>
+                    </div>
+                    <div class="case_num">
+                        <span class="buhege_icon"></span>
+                        <span class="anjianshu_text">不合格案件数量</span>
+                        <span class="anjianshu_num">{{tzTongjiData.totalUnPassCaseCount}}</span>
+                    </div>
+                </div>
+                <div class="fl top_center_box">
+                    <div class="c_menu_box clearfix">
+                        <ul class="t_ul_menu tz_t_ul_menu">
+                            <li class='fl'>巡查视角</li>
+                            <li class='fl'>本院视角</li>
+                            <li class='fl active'>庭长视角</li>
+                            <li class='fl'>法官视角</li>
+                        </ul>
+                    </div>
+                    <div class="c_center_box">
+                        <p class="ckge-tzchart1"><span ng-click="tzchart1MoreClick()">查看更多</span></p>
+                        <div id="tz_chart1"></div>
+                        <div id="tz_chart1_more_form" style="padding: 10px;float: left;width: 100%;display: none">
+                            <form name="myForm">
+                                <div class="form-group text-center marauto" style="margin-top: 10px;margin-bottom: 0;">
+                                    <div id="tz_chart1_more"></div>
+                                </div>
+
+                            </form>
+                        </div>
+                    </div>
+                </div>
+                <div class="fr top_right_box">
+                    <P class="center_c_tilte"> 电子卷宗制作与质检情况排行榜</P>
+                    <div class="top_10_content">
+                        <P class="center_c_sub_tilte">电子卷宗制作数量排行榜</P>
+                        <ul class="top_10_ul">
+                            <li ng-repeat="item in tzTop10ZhizuoDatas track by $index"><span>{{$index+1}}</span><span
+                                    title="{{item.name}}">{{item.name}}</span><span
+                                    class="pull-right">{{item.value}}</span>
+                            </li>
+                        </ul>
+                    </div>
+                    <div class="top_10_content">
+                        <P class="center_c_sub_tilte"> 电子卷宗合格数量排行榜</P>
+                        <ul class="top_10_ul">
+                            <li ng-repeat="item in tzTop10JuanzongDatas track by $index"><span>{{$index+1}}</span><span
+                                    title="{{item.name}}">{{item.name}}</span><span
+                                    class="pull-right">{{item.value}}</span>
+                            </li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+            <div class="centet_content clearfix">
+                <div class="center_l_box fl">
+                    <div id="tz_chart2"></div>
+                    <div id="tz_chart3"></div>
+                </div>
+                <div class="center_r_box fr">
+                    <div id="tz_chart4"></div>
+                </div>
+            </div>
+        </div>
+
+        <div class="fgshj">
+            <div class="top_content clearfix">
+                <div class="fl top_left_box">
+                    <div class="case_num">
+                        <span class="anjianshu_icon"></span>
+                        <span class="anjianshu_text first_text">案件数</span>
+                        <span class="anjianshu_num first_num">{{fgTongjiData.totalCaseCount}}</span>
+                    </div>
+                    <div class="case_num">
+                        <span class="yisaomiao_icon"></span>
+                        <span class="anjianshu_text">已扫描上传案件数</span>
+                        <span class="anjianshu_num">{{fgTongjiData.totalUploadCaseCount}}</span>
+                    </div>
+                    <div class="case_num">
+                        <span class="shengcheng_icon"></span>
+                        <span class="anjianshu_text">随案生成批次</span>
+                        <span class="anjianshu_num">{{fgTongjiData.totalUploadIndex}}</span>
+                    </div>
+                    <div class="case_num">
+                        <span class="shangchuan_icon"></span>
+                        <span class="anjianshu_text">扫描上传页数</span>
+                        <span class="anjianshu_num">{{fgTongjiData.totalFileNum}}</span>
+                    </div>
+                    <div class="case_num">
+                        <span class="buhege_icon"></span>
+                        <span class="anjianshu_text">不合格案件数量</span>
+                        <span class="anjianshu_num">{{fgTongjiData.totalUnPassCaseCount}}</span>
+                    </div>
+                    <!-- <div class="case_num">
+                    <span class="plhedui_icon"></span>
+                    <span class="plhedui_text">待核实数量</span>
+                    <span class="plhedui_num">299</span>
+                </div> -->
+                </div>
+                <div class="fl top_center_box">
+                    <div class="c_menu_box clearfix">
+                        <ul class="t_ul_menu fg_t_ul_menu">
+                            <li class='fl'>巡查视角</li>
+                            <li class='fl'>本院视角</li>
+                            <li class='fl'>庭长视角</li>
+                            <li class='fl active'>法官视角</li>
+                        </ul>
+                    </div>
+                    <div class="c_center_box">
+                        <div id="fg_chart1"></div>
+                    </div>
+                </div>
+                <div class="fr top_right_box">
+                    <div id="fg_chart2"></div>
+                </div>
+            </div>
+            <div class="centet_content clearfix">
+                <div class="center_l_box fl clearfix">
+                    <div id="fg_chart3" class="fl"></div>
+                    <div class="nohege_box fl">
+                        <p class="nohege_title">不合格案件列表<a href="###" ng-click="fgckquanbu()" class="pull-right">查看全部
+                                >></a></p>
+                        <div class="nohege_list">
+                            <div class="clearfix scroll_head">
+                                <div class="pull-left">序号</div>
+                                <div class="pull-left">案件号</div>
+                                <div class="pull-right">不合格原因</div>
+                            </div>
+                            <div class="slider_box">
+                                <ul id="cbr-fail-list" style="cursor: pointer;">
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="center_r_box fr">
+                    <div id="fg_chart4"></div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class='caseinfo-list' ng-show='caseInfoShow'>
+        <div><button class="btn btn-info btn-sm my-search" style="margin-top: 0;" ng-click="fanhui()">返回</button>
+            <!-- <div class="select_box case_fayuan" style="display: inline-block; width: 250px;"><span>法<i style="visibility: hidden">占位</i>院：</span> -->
+            <div class="select_box case_fayuan" style="display: inline-block; width: 320px;margin-left: 50px;"><span style="    display: inline-block;height: 40px;line-height: 40px;">法院：</span>
+                <div class="btn-group dropdown my-dropdown" style="margin-top: 0px;width: 225px;margin-left: 5px;" id="dropdown">
+                    <input id="fayuan_input_case" readonly="readonly"  style="width: 224px;text-align: left" list="courtList"
+                        placeholder="请输入法院名称" type="input"
+                        class="selectInput btn my-btn-default btn-default dropdown-toggle" data-toggle="dropdown"
+                        aria-haspopup="true" aria-expanded="false" />
+                    <input type="hidden" name="hidedrop_1" id="hidedrop_1" value="超级管理员" />
+                    <div class="picture_click dropDowns"></div>
+                    <div id="courtList" class="selectList">
+                        <div class="zlcxlist" ng-click="selectItemClick(item)" ng-repeat="item in courtList"
+                            id="{{item.courtId}}">{{item.courtName}}</div>
+                    </div>
+                    <span class="input-group-addon" style="position: absolute; width: 35px;  height: 34px;top: 0; right: 0;pointer-events: none;" data-toggle="dropdown" aria-haspopup="true"
+                        aria-expanded="true">
+                        <span class="caret ng-hide" ng-show="!courtsText"></span>
+                        <i class="fa fa-close" ng-show="courtsText" ng-click="_clearCourts()"></i>
+                    </span>
+                </div>
+            </div>
+        </div>
+        <table region="center" style="width:100%;min-height:500px;overflow: hidden" id="caseList-table"
+            class="caseList-datagrid">
+        </table>
+        <my-pager></my-pager>
+    </div>
+    <script type="text/javascript" src="../../plugin/jquery/jquery.min.js"></script>
+    <script type="text/javascript" src="../../plugin/jquery/jquery.validate.js"></script>
+    <script type="text/javascript" src="../../plugin/jquery/messages_zh.js"></script>
+    <script type="text/javascript" src="../../plugin/angular/angular.min.js"></script>
+    <script type="text/javascript" src="../../plugin/angular/angular-ui-router.min.js"></script>
+    <script type="text/javascript" src="../../plugin/angular/angular-sanitize.min.js"></script>
+    <script type="text/javascript" src="../../plugin/bootstrap/js/bootstrap.min.js"></script>
+    <script type="text/javascript" src="../../plugin/easyui/jquery.easyui.min.js"></script>
+    <script type="text/javascript" src="../../js/app_directives.js"></script>
+    <script type="text/javascript" src="../../js/app_controllers.js"></script>
+    <script type="text/javascript" src="../../js/app_services.js"></script>
+    <script type="text/javascript" src="../../plugin/layer/layer.min.js"></script>
+    <script type="text/javascript" src="../../plugin/echarts/echarts.3.0.min.js"></script>
+    <script src="../../plugin/zTree3/js/jquery.ztree.all.min.js"></script>
+    <script type="text/javascript" src="../../plugin/datetimepicker/jquery.datetimepicker.js"></script>
+    <script type="text/javascript" src="./js/xcdrawchart.js"></script>
+    <script type="text/javascript" src="./js/bydrawchart.js"></script>
+    <script type="text/javascript" src="./js/tzdrawchart.js"></script>
+    <script type="text/javascript" src="./js/fgdrawchart.js"></script>
+    <script type="text/javascript" src="./js/page.js"></script>
+</body>
+
+
+</html>

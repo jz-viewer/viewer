@@ -1,0 +1,1128 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8"/>
+    <title>案件预览</title>
+
+    <link href="../../favicon.ico" rel="shortcut icon" type="image/x-icon"/>
+    <link rel="stylesheet" href="../../plugin/easyui/easyui.css"/>
+    <link rel="stylesheet" href="../../plugin/bootstrap/css/bootstrap.min.css"/>
+    <link rel="stylesheet" href="../../plugin/bootstrap/css/font-awesome.min.css"/>
+    <link rel="stylesheet" href="../../plugin/bootstrap/css/animate.css"/>
+    <link rel="stylesheet" href="../../plugin/layui/css/layui.css"/>
+    <link rel="stylesheet" href="../../plugin/prettyPhoto/css/prettyPhoto.css" type="text/css" media="screen" charset="utf-8" />
+
+    <!--<link rel="stylesheet" href="../../css/basic.css"/>-->
+
+    <link href="js/dist/jquery.magnify.css" rel="stylesheet">
+    <link rel="stylesheet" href="css/zTreeStyle/courtZTree.css"/>
+    <link href="../../plugin/jPlayer-2.9.2/dist/skin/blue.monday/css/jplayer.blue.monday.min.css" rel="stylesheet" type="text/css" />
+    <link rel="stylesheet" href="ruling/css/ruling.css"/>
+
+
+
+    <script type="text/javascript" src="../../plugin/jquery/jquery.min.js"></script>
+    <script type="text/javascript" src="../../plugin/jquery/jquery.validate.js"></script>
+    <script type="text/javascript" src="../../plugin/jquery/messages_zh.js"></script>
+    <script type="text/javascript" src="../../plugin/angular/angular.min.js"></script>
+    <script type="text/javascript" src="../../plugin/angular/angular-ui-router.min.js"></script>
+    <script type="text/javascript" src="../../plugin/prettyPhoto/js/jquery.prettyPhoto.js"></script>
+    <script type="text/javascript" src="../../plugin/angular/angular-sanitize.min.js"></script>
+    <script type="text/javascript" src="../../js/app_directives.js"></script>
+    <script type="text/javascript" src="../../js/app_controllers.js"></script>
+    <script type="text/javascript" src="../../js/app_services.js"></script>
+
+    <script type="text/javascript" src="js/jquery.base64.js"></script>
+    <script type="text/javascript" src="js/jquery.ztree.core.js"></script>
+    <script type="text/javascript" src="js/jquery.ztree.excheck.js"></script>
+    <script type="text/javascript" src="js/jquery.ztree.exedit.js"></script>
+    <script type="text/javascript" src="../../plugin/zTree3/js/jquery.ztree.exhide.min.js"></script>
+    <script type="text/javascript" src="../../plugin/layer3.1.1/layer.js"></script>
+    <script type="text/javascript" src="../../plugin/layui/layui.js"></script>
+    <script type="text/javascript" src="../../plugin/jPlayer-2.9.2/dist/jplayer/jquery.jplayer.min.js"></script>
+    <script type="text/javascript" src="js/udraggable/jquery.event.ue.js"></script>
+
+    <script type="text/javascript" src="js/jcanvas.min.js"></script>
+    <!--<script type="text/javascript" src="js/pdfobject.js"></script>-->
+    <script type="text/javascript" src="js/pdfobject.min.js"></script>
+
+    <link rel="stylesheet" href="css/page.css"/>
+    <script type="text/javascript" src="js/dataTrans.js"></script>
+    <!--
+    本方案的批注不再使用了
+    <script type="text/javascript" src="js/pnote.js"></script>
+    -->
+    <script type="text/javascript" src="js/fnote.js"></script>
+    <script type="text/javascript" src="js/treeOp.js"></script>
+    <script type="text/javascript" src="js/coolAlbum.js"></script>
+    <script type="text/javascript" src="js/page.js"></script>
+    <script type="text/javascript" src="js/control.js"></script>
+    <script type="text/javascript" src="js/disputData.js"></script>
+    <script type="text/javascript" src="js/dispute.js"></script>
+    <script type="text/javascript" src="js/dispute.album.js"></script>
+    <script type="text/javascript" src="ruling/js/ruling.js"></script>
+
+    <style type="text/css">
+        .fnote {
+            text-align: left;
+            border: 1px solid #666666;
+            background-color: white;
+        }
+        .hide-note .fnote{
+            display: none;
+        }
+
+    </style>
+
+</head>
+<body ng-app="myApp" ng-controller="appController" style="" >
+    <div id="header">
+        <span class="casename" ng-bind="caseinfo.case_name"></span>
+        <div id="tab-info">
+            <div class="tab-text"><span class="pre-text" style="color: #fff;">案件预览</span> > <span ng-bind="caseinfo.case_name"></span></div>
+        </div>
+    </div>
+    <div style="margin-left:30px;margin-top:16px;width: 1860px;">
+        <div class="panel" style="width: 1860px;">
+            <div class="top-box" style="text-align:center;height: 60px;">
+                <div style="display: inline-block;float: left;">
+                    <ul class="tab-box">
+                        <li class="base select-tab" style="">案件信息</li>
+                        <li class="detail"  style="">电子卷宗</li>
+                        <li class="dispute-tab"  style="">争议焦点</li>
+                        <li class="ruling-tab"  style="">执行线索</li>
+                    </ul>
+                </div>
+                <div class="top-search" style=""><input type="search" style="height: 30px;color:#999;font-size:16px;" placeholder="&nbsp;&nbsp;&nbsp;全文检索" value=""><span><img width="18px" width="18px" src="css/images/search.png"></span></div>
+            </div>
+        </div>
+    </div>
+    <div class="tab-tail base-info active" style="margin-left:30px;width: 1860px;height:928px;overflow: hidden">
+        <div style="text-align: center;">
+            <div class="panel" style="padding-top: 30px;padding-left:130px;width: 1860px;height:928px;">
+                <div style="text-align: left;width: 1600px;line-height:54px;padding-left:60px;color:#508aed;height:54px;background-color: #ecf3ff;border: 1px solid #bdcce5;">基本信息</div>
+                <div style="width: 1600px;text-align:left;border: 1px solid #bdcce5;height: 430px;">
+                    <div style="margin-top:26px;line-height:50px;width:45%;padding-left:60px;	float:left;">
+                        案号：<span ng-bind="caseinfo.case_name"></span>
+                        <br>
+                        案件唯一标示：<span ng-bind="caseinfo.case_code"></span><br>
+                        法院名称：<span ng-bind="caseinfo.court_name"></span><br>
+                        <p>案件类型：<span ng-bind="caseinfo.case_type_name"></span></p>
+                        <p>案件流程：<span ng-bind="caseinfo.spcx_name"></span></p>
+                        <p>所属法院：<span ng-bind="caseinfo.court_name"></span></p>
+                        <p>所属庭室：<span ng-bind="caseinfo.court_room_name"></span></p>
+                        <p>书记员：<span ng-bind="caseinfo.upload_user_name"></span></p>
+                    </div>
+                    <div style="margin-top:26px;line-height:50px;width:45%;padding-left:60px;	float:right;">
+                        <p>原告：<!--<span ng-bind="caseinfo.court_name"></span>--></p>
+                        <p>被告：<!--<span ng-bind="caseinfo.court_name"></span>--></p>
+                        <p>诉讼请求：<!--<span ng-bind="caseinfo.court_name"></span>--></p>
+                        <p>立案时间：<span ng-bind="caseinfo.la_date"></span></p>
+                        <p>结案时间：<span ng-bind="caseinfo.ja_date"></span></p>
+                    </div>
+                </div>
+                <div style="width: 1600px;line-height:54px;padding-left:60px;color:#508aed;height:54px;background-color: #ecf3ff;border: 1px solid #bdcce5;">案件信息</div>
+                <div style="width: 1600px;height: 250px;text-align:left;border: 1px solid #bdcce5;">
+                    <div style="margin-top:26px;line-height:50px;width:45%;padding-left:60px;	float:left;">
+                        <p>案件来源：<span ng-if="caseinfo.comeFrom=='1'">信访系统</span><span ng-if="caseinfo.comeFrom=='2'">办案系统</span></p>
+                        <p>处理人：</p>
+                        <p>处理状态：</p>
+                        <p>处理时间：</p>
+                    </div>
+                    <div style="margin-top:26px;line-height:50px;width:45%;padding-left:60px;	float:right;">
+                        <p>一审案号：<span ng-bind="caseinfo.firstTrialName"></span></p>
+                        <p>二审案号：<span ng-bind="caseinfo.secondTrialName"></span></p>
+                        <p>再审案号：<span ng-bind="caseinfo.thirdTrialName"></span></p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="tab-tail ruling-info" style="margin-left:30px;width: 1860px;">
+        <div class="ruling-resume">
+            <div class="ruling-timer" style="display: inline-block;">
+                <div class="timer-progress" style="display: inline-block;">
+                    <div class="progress-block"><span>执行准备</span></div>
+                    <div class="progress-text"></div>
+                </div>
+                <div class="timer-progress" style="display: inline-block;">
+                    <div class="progress-block"><span>财产查控</span></div>
+                    <div class="progress-text"></div>
+                </div>
+                <div class="timer-progress" style="display: inline-block;">
+                    <div class="progress-block"><span>财产处置与其它执行措施</span></div>
+                    <div class="progress-text"></div>
+                </div>
+                <div class="timer-progress" style="display: inline-block;">
+                    <div class="progress-block"><span>结案</span></div>
+                    <div class="progress-text"></div>
+                </div>
+                <div class="timer-progress">
+                    <div class="progress-block"><span>恢复执行</span></div>
+                    <div class="progress-text"></div>
+                </div>
+            </div >
+            <div class="open-link-div" style="display: inline-block;">
+                <div class="ruling-btn open-relate">查看关联案件卷宗</div>
+            </div>
+        </div>
+        <div class="ruling-tail">
+            <table class="progress-table" style="width:100%;">
+                <tr>
+                    <td>
+                        <div class="progress-block"><span>执行准备</span></div>
+                    </td>
+                    <td><!--
+                        <div class="progress-msg">
+                            <div class="must-msg"><span>(关联)</span></div>
+                            <span>2017年1月3日</span>
+                            <a>执行通知书【2017冀01201执01号】</a>
+                            <button>重复上传</button><button>删除</button>
+                        </div>
+                        <div class="progress-msg">
+                            <div class="must-msg"><span></span></div>
+                            <span>2017年1月3日</span>
+                            <a>执行通知书【2017冀01201执01号】</a>
+                            <button>重复上传</button><button>删除</button>
+                        </div>
+                        <div class="progress-msg">
+                            <div class="must-msg"><span></span></div>
+                            <span>2017年1月3日</span>
+                            <a>执行通知书【2017冀01201执01号】</a><button>重复上传</button><button>删除</button>
+                        </div>
+                        <div class="progress-msg">
+                            <div class="must-msg"><span></span></div><span>2017年1月3日</span><a>执行通知书【2017冀01201执01号】</a><button>重复上传</button><button>删除</button>
+                        </div>
+                        <div class="progress-msg">
+                            <div class="must-msg"><span></span></div><span>2017年1月3日</span><a>执行通知书【2017冀01201执01号】</a><button>重复上传</button><button>删除</button>
+                        </div>-->
+                    </td>
+                </tr>
+                <tr>
+                    <td>
+                        <div class="progress-block"><span>财产查控</span></div>
+                    </td>
+                    <td></td>
+                </tr>
+                <tr>
+                    <td>
+                        <div class="progress-block"><span>财产处置与其它执行措施</span></div>
+                    </td>
+                    <td></td>
+                </tr>
+                <tr>
+                    <td>
+                        <div class="progress-block"><span>结案</span></div>
+                    </td>
+                    <td></td>
+                </tr>
+                <tr>
+                    <td>
+                        <div class="progress-block"><span>恢复执行</span></div>
+                    </td>
+                    <td></td>
+                </tr>
+            </table>
+        </div>
+    </div>
+    <div class="tab-tail dispute-info" style="margin-left:30px;height: 928px;width: 1860px;">
+        <div style="width: 300px;height:928px;display: inline-block;float: left;">
+            <div class="panel" style="height:928px;">
+                <div class="" style="font-size: 12px;overflow: auto;">
+                </div>
+            </div>
+        </div>
+        <div style="margin-left:30px;width: 800px;height:928px;display: inline-block;float: left;">
+            <div class="panel" style="height:928px;">
+                <div class="" style="height: 200px;">
+                    <div style="padding-left:15px;line-height:30px;height: 30px;"><span style="">争议焦点：</span>
+                        <span class="dispute-simple-t"></span>
+                        <span style="float:right;" class='rm-dispute-btn remove-btn' title='删除争议点'></span>
+                        <span style="float:right;" class='correlate-btn link-btn' title='关联当前文件与争议点'></span>
+                        <span style="float:right;" class='to-edit-btn edit-btn' title='修改争议点信息'></span>
+                    </div>
+                    <div style="height: 1px;width: 100%;background: #DBDBDB;"></div>
+                    <div style="overflow: auto;height: 168px;padding:15px;"><span class="dispute-detail-t"></span>
+                    </div>
+                </div>
+                <div style="height: 5px;width: 100%;background: #DBDBDB"></div>
+                <div class="dispute-album" style="font-size: 12px;overflow: auto;height:928px;">
+                    <div class="disp-album-tool" style="">
+                    </div>
+                    <div style="height: 1px;width: 100%;background: #DBDBDB"></div>
+                    <div class="album-check-tool">
+                        <div class="album-checkl" style="">
+                        </div>
+                        <div class="album-checkr" style="">
+                            <span class="album-list-show"></span>
+                            <span class="album-grid-show"></span>
+                        </div>
+                    </div>
+                    <div style="height: 2px;width: 100%;background: #DBDBDB"></div>
+                    <div class="album-body" style="height: 800px;overflow: auto;">
+                        <div class="album-file-list" style="height:800px;overflow: auto;"></div>
+                        <div class="album-file-pre"></div>
+                    </div>
+                    <div style="height: 1px;width: 100%;background: #DBDBDB"></div>
+                    <div class="album-foote" style="padding-left: 20px;height: 20px;line-height: 20px;">
+                        当前目录：<span class="album-dmsg"></span> 共<span class="album-fmsg"></span>个文件
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div style="margin-left:30px;width: 700px;display: inline-block;float: left;overflow: hidden;">
+            <div class="panel" style="height:928px;overflow: hidden;">
+                <div class="" style="font-size: 12px;overflow: auto;height:928px;text-align:center;overflow: hidden;">
+                    <div class="picbox-tool" style="height: 63px;line-height: 63px;text-align:left;">
+
+                        <span class="tool-btn ocrtext"><button class="icon-ocr"></button><span style="padding-left: 20px;height: 17px;">图文识别</span></span>
+                        <!--<span class="tool-btn pedit back nousing"><span class="icon-back">&nbsp;&nbsp;&nbsp;&nbsp;</span></span>-->
+
+                    </div>
+                    <div style="height: 1px;width: 100%;background: #DBDBDB"></div>
+                    <div class="filebox-tool" style="">
+                        <div class="filebox-check">
+                            <span class="tool-btn left-btn icon-left" style="float: left">&nbsp;&nbsp;&nbsp;&nbsp;</span>
+                            <span class="tool-btn taggle-anno" style="padding-left: 20px;"><img style="padding-left: 15px;" src="css/images/to-hidden.png"><span>隐藏批注</span></span>
+                            <span class="tool-btn p-big"><button class="icon-big"></button><span style="padding-left: 20px;height: 17px;">放大</span></span>
+                            <span class="tool-btn small"><button class="icon-small"></button><span style="padding-left: 20px;height: 17px;">缩小</span></span>
+                            <span class="tool-btn right-btn icon-right" style="float: right">&nbsp;&nbsp;&nbsp;&nbsp;</span>
+                        </div>
+                    </div>
+                    <div style="height: 1px;width: 100%;background: #DBDBDB"></div>
+                    <!--<div style="text-align:center;height: 800px;overflow: auto;">-->
+                    <div id="dis-fileBox" style="text-align:center;height: 800px;overflow: auto;position: relative;">
+                    </div>
+                    <div style="height: 1px;width: 100%;background: #DBDBDB"></div>
+                    <div class="dis-file-foot" style="padding-left: 20px;height: 20px;line-height: 20px;text-align:left;">
+                        当前文件：<span class="dis-fnmsg"></span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="tab-tail detail-info" style="margin-left:30px;height: 928px;width: 1860px;">
+        <div style="width: 300px;height:928px;display: inline-block;float: left;">
+            <div class="panel" style="height:928px;">
+                <div class="" style="font-size: 12px;overflow: auto;">
+                    <div class="menu-tool" style="display: block;height:100px;">
+                        <div class="taggle" style="padding-top:28px;float: left;padding-left: 23px;">
+                            <span class="taggle-hidden"></span>
+                            <span class="taggle-text">隐藏空目录</span>
+                        </div>
+                        <div class="newdir" style="padding-top:28px;float: right;padding-right: 23px;display: none;">
+                            <span class="add-pic"></span>
+                            <span class="add-text">新建目录</span>
+                        </div>
+                        <div class="xiangqing" style="padding-top:28px;float: right;padding-right: 23px;">
+                            <span class="add-pic"></span>
+                            <span class="add-text">详<span style="visibility: hidden">目录</span>情</span>
+                        </div>
+                        <div class="expand" style="padding-top:28px;float: left;padding-left: 23px;">
+                            <span class="expand-pic"></span>
+                            <span class="expand-text">展开全部</span>
+                        </div>
+                        <div class="collapse-btn" style="padding-top:28px;float: right;padding-right: 23px;">
+                            <span class="collapse-pic"></span>
+                            <span class="collapse-text">折叠全部</span>
+                        </div>
+                        <!--
+                        <div class="cleartree" style="padding-top:28px;float: right;padding-right: 23px;">
+                            <span class="cleartree-pic"></span>
+                            <span class="cleartree-text">重置目录</span>
+                        </div>
+                        -->
+                    </div>
+                    <div class="direct-search" style="position:relative;padding-top:20px;padding-left:23px;width:250px;">
+                        <input style="width:250px;height:25px;border:none;border: 1px solid #bbb;border-radius: 10px;color:#999;" placeholder="&nbsp;&nbsp;&nbsp;目录搜索" type="text">
+                        <img width="13px" width="13px" style="position:relative;top:-20px;left: 230px;" src="css/images/search.png">
+                    </div>
+                    <div class="menu-tree" style="display: block;top:50px;height:768px;overflow: auto;">
+                        <ul id="demoZtree" class="ztree" style="height:820px;"></ul>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div style="margin-left:30px;width: 800px;height:928px;display: inline-block;float: left;">
+            <div class="panel" style="height:928px;">
+                <div class="" style="font-size: 12px;overflow: auto;height:928px;">
+                    <div class="coolbum-tool" style="">
+                    </div>
+                    <div style="height: 1px;width: 100%;background: #DBDBDB"></div>
+                    <div class="coolalbum-check-tool">
+                        <div class="coolalbum-checkl" style="">
+                        </div>
+                        <div class="coolalbum-checkr" style="">
+                            <span class="list-show"></span>
+                            <span class="grid-show"></span>
+<!--
+                            <img class="list-show" style="padding: 3px;" src="css/images/list.png">
+-->
+                            <!--<img class="grid-show" style="padding: 3px;" src="css/images/grid.png">-->
+                        </div>
+                    </div>
+                    <div style="height: 1px;width: 100%;background: #DBDBDB"></div>
+                    <div class="coolalbum-body" style="height: 800px;overflow: auto;">
+                        <div class="file-list" style="height:800px;overflow: auto;"></div>
+                        <div class="file-pre"></div>
+                    </div>
+                    <div style="height: 1px;width: 100%;background: #DBDBDB"></div>
+                    <div class="coolalbum-foote" style="padding-left: 20px;height: 20px;line-height: 20px;">
+                        当前目录：<span class="dmsg"></span> 共<span class="fmsg"></span>个文件
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div style="margin-left:30px;width: 700px;display: inline-block;float: left;overflow: hidden;">
+            <div class="panel" style="height:928px;overflow: hidden;">
+                <div class="" style="font-size: 12px;overflow: auto;height:928px;text-align:center;overflow: hidden;">
+                    <div class="picbox-tool" style="height: 63px;line-height: 63px;text-align:left;">
+
+                        <span class="tool-btn ocrtext"><button class="icon-ocr"></button><span style="padding-left: 20px;height: 17px;">图文识别</span></span>
+                        <span class="tool-btn dispute-edit"><button class="icon-dispute"></button><span style="padding-left: 20px;height: 17px;">争议焦点</span></span>
+                        <!--<span class="tool-btn pedit back nousing"><span class="icon-back">&nbsp;&nbsp;&nbsp;&nbsp;</span></span>-->
+
+                    </div>
+                    <div style="height: 1px;width: 100%;background: #DBDBDB"></div>
+                    <div class="filebox-tool" style="">
+                        <div class="filebox-check">
+                            <span class="tool-btn left-btn icon-left" style="float: left">&nbsp;&nbsp;&nbsp;&nbsp;</span>
+                            <span class="tool-btn panno" style="padding-left: 20px;"><img style="padding-left: 15px;" src="css/images/annotation.png"><span>批注</span></span>
+                            <span class="tool-btn taggle-anno" style="padding-left: 20px;"><img style="padding-left: 15px;" src="css/images/to-hidden.png"><span>隐藏批注</span></span>
+                            <span class="tool-btn p-big"><button class="icon-big"></button><span style="padding-left: 20px;height: 17px;">放大</span></span>
+                            <span class="tool-btn small"><button class="icon-small"></button><span style="padding-left: 20px;height: 17px;">缩小</span></span>
+                            <span class="tool-btn right-btn icon-right" style="float: right">&nbsp;&nbsp;&nbsp;&nbsp;</span>
+                        </div>
+                    </div>
+                    <div style="height: 1px;width: 100%;background: #DBDBDB"></div>
+                    <!--<div style="text-align:center;height: 800px;overflow: auto;">-->
+                    <div id="fileBox" style="text-align:center;height: 800px;overflow: auto;position: relative;">
+                       <!-- &lt;!&ndash;<div id="fontEdit" style="text-align: left;display:none;float: inherit;position: absolute;border: 0.5px dotted #000;z-index: 300;">
+                            <span style="text-align: left" contenteditable="true"></span>
+                        </div>&ndash;&gt;-->
+
+                        <div id="sharpEdit" style="text-align: left;display:none;float: inherit;position: absolute;border: 0.5px dotted #000;">
+                            <button id="remove"><i class="fa fa-times" aria-hidden="true"></i></button>
+                        </div>
+                    </div>
+                    <!--<div id="fileBox" style="text-align:center;height: 800px;overflow: auto;position: relative;">
+                        <div style="/* display: inline; */">
+                            <img width="565" height="800" src="../../../court/download/downloadFile?fileID=2999818312877588&amp;subCaseId=5320783317858920" style="width: 706.25px; height: 1000px;">
+                        </div>
+                        <div class="fnote" style="position: absolute;top:0px;left:0px;width: 200px;height: 800px;z-index:3;text-align: left;">
+                            <span style="display: block; ">测试</span>
+                        </div>
+                    </div>-->
+                    <div style="height: 1px;width: 100%;background: #DBDBDB"></div>
+                    <div class="file-foot" style="padding-left: 20px;height: 20px;line-height: 20px;text-align:left;">
+                        当前文件：<span class="fnmsg"></span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+
+    <!--<div style="position: absolute;top:20%;left: 20%;width: 50%;height: 50%;display: none;">
+        <div class="panel">
+            <div class="panel-header">选择文件保存目录</div>
+            <div class="panel-body" style="text-align:center;height: 300px;">
+                <ul id="directTree" class="ztree" style="height:96%;"></ul>
+            </div>
+            <div class="panel-footer" style="text-align: right">
+                <button>确认</button>
+                <button>关闭</button>
+            </div>
+        </div>
+    </div>-->
+    <div style="position: absolute;top:20%;left: 20%;width: 50%;height: 35%;display: none;">
+        <div class="panel">
+            <div class="panel-header">设置下载路径</div>
+            <div class="panel-body" style="height: 80px;">
+                <span style="top: 50%;left: 35%;">文件：ali.pdf;280177200288063.jpg;</span>
+                <div>
+                    <span>下载到：</span><input type="text"><button style="height: 20px;width: 50px;" type="button" value="">浏览</button>
+                </div>
+            </div>
+            <div class="panel-footer" style="text-align: right">
+                <button>确认</button>
+                <button>关闭</button>
+            </div>
+        </div>
+    </div>
+</body>
+<script>
+    var layerNum=0;
+    //页面数据操作
+    var DataDom = {
+
+    }
+    //页面样式操作
+    var StyleCla = {
+
+    }
+    StyleCla.prototype = {
+
+    }
+    //操作按键及绑定
+    var ToolBtn = function(){
+        this.btns = [];
+        this.drawStatus = 0;
+    }
+    ToolBtn.prototype = {
+        addBtn: function () {
+            //创建button对象
+        },
+        addBtnTo: function () {
+            //创建button对象，并加入dom对象
+        },
+        rmBtn: function () {
+            //删除button对象
+        },
+        rmBtnFrom: function () {
+            //删除button对象，同时从dom对象中删除
+        },
+        appendTo: function () {
+            //加入dom对象
+        },
+        rmFrom: function () {
+            //从dom对象中删除
+        },
+        bindFunc: function () {
+            //为btn绑定操作
+        },
+        bindCoolAlbumBtn: function () {
+            $(".list-show").click(function () {
+                $(this).addClass("active");
+                $(".grid-show").removeClass("active")
+
+                var $dirs = $(".file-list").find(".grid-file.cool-folder");
+                for(var i=0;i<$dirs.length;i++){
+                    var $dir=$dirs.eq(i);
+                    $dir.children("img").attr("src","css/images/folder-nouse.png");
+                }
+                $dirs.removeClass("grid-file");
+                $dirs.addClass("list-file");
+
+                var $files = $(".file-list").find(".grid-file.cool-file");
+                for(var i=0;i<$files.length;i++){
+                    var $fileDiv=$files.eq(i);
+                    var icon = $fileDiv.children("img").attr("icon");
+                    $fileDiv.children("img").attr("src",icon);
+                }
+                $files.removeClass("grid-file");
+                $files.addClass("list-file");
+                $(".file-list").unbind("scroll");
+            });
+            $(".grid-show").click(function () {
+                $(this).addClass("active");
+                $(".list-show").removeClass("active")
+
+                var $dirs = $(".file-list").find(".list-file.cool-folder");
+                for(var i=0;i<$dirs.length;i++){
+                    var $dir=$dirs.eq(i);
+                    $dir.children("img").attr("src","../../img/timg.jpg");
+                    $dir.children("img").addClass("opng");
+                }
+                $dirs.removeClass("list-file");
+                $dirs.addClass("grid-file");
+
+                var $files = $(".file-list").find(".list-file.cool-file");
+                for(var i=0;i<$files.length;i++){
+                    var $fileDiv=$files.eq(i);
+                    var imgsrc = $fileDiv.children("img").attr("imgsrc");
+                    $fileDiv.children("img").attr("src","css/images/loading.gif");
+                }
+                $files.removeClass("list-file");
+                $files.addClass("grid-file");
+
+                $.coolalbum.lazyload();
+                $(".file-list").scroll(function () {
+                    $.coolalbum.lazyload();
+                });
+            });
+        },
+        bindSearchBtn: function () {
+            $(".top-search img").click(function () {
+                $.treeOp.resetDirectSearch();
+                var text = $(".top-search input").val();
+                if(typeof text == "undefined" || text == null || text == ""){
+                    /*layer.msg("全文检索为空");*/
+                    $.dataTrans.fullSearchStatus=false;
+                    $.treeOp.resetFulTsearch();
+                    var fileinfos = $.dataTrans.filesMap;
+                    fileinfos.forEach(function(data){
+                        data.isFSResult = false;
+                    });
+                    //默认选择第一个目录
+                    var treeObj = $.fn.zTree.getZTreeObj("demoZtree");
+                    var nodes = treeObj.getNodesByParam("isHidden", false);
+                    if(nodes[0]){
+                        //触发默认数据的click事件
+                        $("#"+nodes[0].tId+"_a").click();//触发ztree点击事件
+                    }
+                    return;
+                }
+                $.dataTrans.esSearch(text, function (code, data) {
+                    if(code=="0"){
+                        $.dataTrans.fullSearchStatus=true;
+                        $.treeOp.fullSearchText=text;
+                        $.treeOp.fulTsearchShow(data)
+                    }else{
+                        layer.msg("全文检索失败");
+                    }
+                });
+            });
+            $(".top-search input").keydown(function (event) {
+                if(event.keyCode==13){
+                    $(".top-search img").trigger("click")
+                }
+            });
+            $(".direct-search img").click(function () {
+                $.treeOp.resetFulTsearch();
+                var text = $(".direct-search input").val();
+                if(typeof text == "undefined" || text == null || text == ""){
+                    $.dataTrans.isDirSearch = false;
+                    $.treeOp.resetDirectSearch();
+                    return;
+                }
+                $.dataTrans.isDirSearch = true;
+                $.treeOp.directSearchShow(text);
+            });
+            $(".direct-search input").bind('input propertychange keyup',function () {
+                /*if(event.keyCode==13){*/
+                    $.treeOp.resetFulTsearch();
+                    var text = $(".direct-search input").val();
+                    if(typeof text == "undefined" || text == null || text == ""){
+                        $.dataTrans.isDirSearch = false;
+                        $.treeOp.resetDirectSearch();
+                        return;
+                    }
+                    $.dataTrans.isDirSearch = true;
+                    $.treeOp.directSearchShow(text);
+                /*}*/
+            });
+        },
+        bindFileBoxBtn: function () {
+
+            $.fnote.annoBtnBind($("#fileBox"));
+
+            $(".panno").click(function () {
+                if($("#fileBox").hasClass("hide-note")){
+                    layer.msg("批注隐藏中");
+
+                    return;
+                }
+                $("#fileBox").addClass("anno");
+                layer.msg("开始批注");
+
+
+                $("#fileBox").find("img").click(function (e) {
+                    var x = e.offsetX;
+                    var y = e.offsetY;
+                    console.log("x:"+x);
+                    console.log("y:"+y);
+
+                    var left = this.offsetLeft;
+                    var top = this.offsetTop;
+                    console.log("left:"+left);
+                    console.log("top:"+top);
+
+                    var width = this.width;
+                    var height = this.height;
+                    console.log("width:"+width);
+                    console.log("height:"+height);
+
+                    /*$("#fileBox").append("<div style='display:inline-block; width: 60px;height: 500px'>" +
+                        "<span style='display: block;position: relative;'>sssss</span>" +
+                        "<span style='display: block;position: absolute;top:0px;'>abc</span>" +
+                        "</div>");*/
+                    /*$(".fnote").append("<span style='display: block;position: absolute;top:"+y+"px;'>请输入批注</span>");*/
+                    var $fnote = $.fnote.createNote("", x, y, left, top, "");
+                    $("#fileBox").append($fnote);
+
+                    $(this).unbind();
+                    $("#fileBox").removeClass("anno");
+                });
+            });
+            $(".detail-info .taggle-anno").click(function () {
+                if($("#fileBox").hasClass("hide-note")){
+                    $("#fileBox").removeClass("hide-note");
+                    $(this).find("span").text("隐藏批注");
+                    $(this).find("img").attr("src", "css/images/to-hidden.png");
+                }else {
+                    $("#fileBox").addClass("hide-note");
+                    $(this).find("span").text("显示批注");
+                    $(this).find("img").attr("src", "css/images/to-show.png");
+                }
+            });
+            $(".dispute-info .taggle-anno").click(function () {
+                if($("#dis-fileBox").hasClass("hide-note")){
+                    $("#dis-fileBox").removeClass("hide-note");
+                    $(this).find("span").text("隐藏批注");
+                }else {
+                    $("#dis-fileBox").addClass("hide-note");
+                    $(this).find("span").text("显示批注");
+                }
+            });
+
+            $(".detail-info .p-big").click(function () {
+                $.fileExt.larger();
+
+                var $fnote = $.fnote.relocate(1);
+            });
+            $(".detail-info .small").click(function () {
+                $.fileExt.smaller();
+
+                var $fnote = $.fnote.relocate(-1);
+            });
+            $(".left-btn").click(function () {
+                var curJObj = $.fileExt.curJObj;
+                var curJDom = $(".cool-file.selected");
+                /*var lastJDom = curJDom.prev().find("input");
+                if(lastJDom&&lastJDom.length>0){
+                    $.fileExt.loadFileDom(lastJDom.val());
+                }*/
+                var lastJDom = curJDom.prev(".cool-file");
+                if(lastJDom&&lastJDom.length>0){
+                    lastJDom.trigger("click");
+                }
+            });
+            $(".right-btn").click(function () {
+                var curJObj = $.fileExt.curJObj;
+                var curJDom = $(".cool-file.selected");
+                var nextJDom = curJDom.next(".cool-file");
+                if(nextJDom&&nextJDom.length>0){
+                    nextJDom.trigger("click");
+                }
+            });
+            $(".detail-info .dispute-edit").bind("click", function () {
+
+                /*var curJObj = $.fileExt.curJObj;
+                if(typeof curJObj == "undefined" || curJObj == null || curJObj == "" ||typeof curJObj.fileId == "undefined" ){
+                    layer.msg("未选择文件");
+                    return;
+                }*/
+
+                $(".dispute-window").remove();
+                var $disputeEdit = $("<div class='dispute-window'>\n" +
+                    "        <div class='' >\n" +
+                    "            <div class='dispute-open-title' style=''><span>争议焦点</span><span class='disput-filename'></span></div>" +
+                    "            <div class='open-dipcontent list'>" +
+                    "            </div>" +
+                    "            <div class='' style='bottom: 0px;right: 0px;'>" +
+                    "                <button class='open-btn open-close' style=''>关闭</button>" +
+                    "            </div>\n" +
+                    "        </div>\n" +
+                    "    </div>");
+
+
+                var $shlter = $("<div style='width: 100%;height: 100%;position: absolute;top: 0px;left: 0px;" +
+                    "z-index: 20;background-color: #777;opacity: 0.5;filter:alpha(opacity=60);-moz-opacity: 0.5;'></div>");
+
+                $("body").append($disputeEdit);
+                $("body").append($shlter);
+
+                $(".open-dipcontent").append("<div class='filetodispute-tool'><span class='add-btn'></span></div>");
+                var fileExt = $.fileExt.curJObj;
+                if(fileExt&&fileExt.fileName){
+                    $(".disput-filename").text(" - "+fileExt.fileName);
+                }
+
+                $disputeEdit.find(".open-close").bind("click", function () {
+                    $disputeEdit.remove();
+                    $shlter.remove();
+                });
+
+                $disputeEdit.delegate("input", "keyup", function () {
+                    $(this).addClass("changed");
+                });
+                $disputeEdit.delegate("textarea", "keyup", function () {
+                    $(this).addClass("changed");
+                });
+
+                $disputeEdit.delegate(".add-btn", "click", function () {
+
+                    if($disputeEdit.find(".changed").length>0){
+                        layer.msg("请先保存修改");
+                        return;
+                    }
+                    if($disputeEdit.find(".new").length>0){
+                        layer.msg("请先保存新增");
+                        return;
+                    }
+
+                    $disputeEdit.find(".dispute").removeClass("active");
+                    $disputeEdit.find(".dispute").removeClass("edit");
+                    var $disputeDiv = $("<div class='dispute edit new'><span class='dispute-label'></span>" +
+                        "<input class='dispute-input' type='text' placeholder='请输入争议点' value=''>"+
+                        "<span class='dispute-to-save save-btn' title='保存争议点'></span>" +
+                        "<span class='dispute-to-remove remove-btn' title='删除争议点'></span>" +
+                        "<span class='dispute-goto goto-btn' title='查看争议点'></span>" +
+                        "</div>");
+
+                    var firstDisputeDiv = $disputeEdit.find(".open-dipcontent .dispute:first");
+                    if(firstDisputeDiv.length>0){
+                        firstDisputeDiv.before($disputeDiv);
+                    }else {
+                        $(".open-dipcontent").append($disputeDiv);
+                    }
+                    $disputeDiv.after("<div class='dispute-detail-input'><textarea placeholder='请输入争议点描述'></textarea></div>");
+
+                    $disputeDiv.find(".dispute-input").focus();
+                });
+                $disputeEdit.delegate(".goto-btn", "click", function () {
+                    if($disputeEdit.find(".changed").length>0){
+                        layer.msg("请先保存修改");
+                        return;
+                    }
+                    if($disputeEdit.find(".new").length>0){
+                        layer.msg("请先保存新增");
+                        return;
+                    }
+                    var disputeDive = $(this).parents(".dispute");
+                    var disputId = disputeDive.attr("id");
+
+                    $(".dispute-tab").trigger("click");
+                    $("#"+disputId).children(".dispute-a").trigger("click");
+
+                    $disputeEdit.remove();
+                    $shlter.remove();
+                });
+                $disputeEdit.delegate(".edit-btn", "click", function () {
+                    if($disputeEdit.find(".changed").length>0){
+                        layer.msg("请先保存修改");
+                        return;
+                    }
+                    if($disputeEdit.find(".new").length>0){
+                        layer.msg("请先保存新增");
+                        return;
+                    }
+                    var disputeDive = $(this).parents(".dispute");
+
+                    $disputeEdit.find(".dispute").removeClass("active");
+                    $disputeEdit.find(".dispute").removeClass("edit");
+
+                    disputeDive.addClass("edit");
+                    disputeDive.find(".dispute-input").removeProp("readonly");
+                    $disputeEdit.find(".dispute-detail-input textarea").removeProp("readonly");
+
+                    disputeDive.find(".dispute-input").focus();
+                });
+                $disputeEdit.delegate(".dispute-label", "click", function () {
+                    if($disputeEdit.find(".changed").length>0){
+                        layer.msg("请先保存修改");
+                        return;
+                    }
+                    if($disputeEdit.find(".new").length>0){
+                        layer.msg("请先保存新增");
+                        return;
+                    }
+                    var disputeDive = $(this).parents(".dispute");
+
+                    $disputeEdit.find(".dispute").removeClass("active");
+                    $disputeEdit.find(".dispute").removeClass("edit");
+
+                    disputeDive.addClass("active");
+                    /*disputeDive.find(".dispute-input").focus();*/
+                    disputeDive.find(".dispute-input").attr("readOnly", "true");
+                    $disputeEdit.find(".dispute-detail-input textarea").attr("readOnly", "true");
+                });
+                $disputeEdit.delegate(".remove-btn", "click", function () {
+                    var disputeDive = $(this).parents(".dispute");
+                    if(disputeDive.hasClass("new")){
+                        disputeDive.remove();
+                        disputeDive.next(".dispute-detail-input").remove();
+                    }else {
+                        if(!disputeDive.find("input").hasClass("changed")){
+                            if($disputeEdit.find(".changed").length>0){
+                                layer.msg("请先保存修改");
+                                return;
+                            }
+                        }
+                        if($disputeEdit.find(".new").length>0){
+                            layer.msg("请先保存新增");
+                            return;
+                        }
+
+                        var issues_id=disputeDive.attr("id");
+                        $.disputeData.removeDispute(issues_id, function () {
+                            disputeDive.remove();
+                            disputeDive.next(".dispute-detail-input").remove();
+
+                            $.disputeData.getDisputeList($.dataTrans.caseInfoId);
+
+                            $.dispute.showDisputeList($.disputeData.getTDisputeList());
+                        });
+                    }
+                });
+                $disputeEdit.delegate(".save-btn", "click", function () {
+                    var disputeDive = $(this).parents(".dispute");
+
+                    var disputeData = new Object();
+                    disputeData.issues_simpledescription=disputeDive.find(".dispute-input").val();
+                    disputeData.issues_detaileddescription=disputeDive.next().find("textarea").val();
+                    if(disputeData.issues_simpledescription==""){
+                        layer.msg("请输入争议焦点信息");
+                        return;
+                    }
+                    disputeData.case_id = $.dataTrans.caseInfoId;
+                    if(disputeDive.hasClass("new")){
+                        $.disputeData.addDispute(disputeData, function () {
+                            $.disputeData.getDisputeList($.dataTrans.caseInfoId)
+                            $.dispute.showFileDisputeWindow();
+
+                            $.dispute.showDisputeList($.disputeData.getTDisputeList());
+                        });
+                    }else {
+                        disputeData.issues_id=disputeDive.attr("id");
+                        $.disputeData.updateDispute(disputeData, function () {
+                            $.disputeData.getDisputeList($.dataTrans.caseInfoId)
+                            $.dispute.showFileDisputeWindow();
+                            $.dispute.showDisputeList($.disputeData.getTDisputeList());
+                        });
+                    }
+
+
+                    $(".dispute").remove();
+                    $(".dispute-detail-input").remove();
+
+
+                });
+                $disputeEdit.delegate(".link-btn", "click", function () {
+                    var disputeDive = $(this).parents(".dispute");
+                    var issues_id=disputeDive.attr("id");
+                    if($disputeEdit.find(".changed").length>0){
+                        layer.msg("请先保存修改");
+                        return;
+                    }
+                    if($disputeEdit.find(".new").length>0){
+                        layer.msg("请先保存新增");
+                        return;
+                    }
+                    if(disputeDive.hasClass("correlated")){
+                        layer.msg("该争议点已关联当前文件，无法再次关联");
+                        return;
+                    }
+
+                    var issuesRelate = new Object();
+                    issuesRelate.issues_id=issues_id;
+                    issuesRelate.case_id=$.dataTrans.caseInfoId;
+
+                    var fileExt = $.fileExt.curJObj;
+                    if(typeof fileExt=="undefined"||typeof fileExt.fileId=="undefined"){
+                        layer.msg("未选择文件，无法关联争议点");
+                        return;
+                    }
+                    var fileid = fileExt.fileId;
+                    var subCaseId = fileExt.subCaseId;
+                    var files = [];
+                    var fileInfo = new Object()
+                    fileInfo.file_id=fileid;
+                    fileInfo.sub_case_id=subCaseId;
+                    files.push(fileInfo);
+                    issuesRelate.fileinfo=files;
+                    $.disputeData.relateDisputeToFile(issuesRelate, function () {
+                        disputeDive.addClass("correlated");
+
+
+                        var curDisputeId = disputeDive.attr("id");
+
+                        $.disputeData.getDisputeList($.dataTrans.caseInfoId);
+
+                        $.dispute.showDisputeList($.disputeData.getTDisputeList());
+
+                        $.dispute.onDisputeLinkClick($("#"+curDisputeId));
+                    });
+
+                });
+                $disputeEdit.delegate(".unlink-btn", "click", function () {
+                    var disputeDive = $(this).parents(".dispute");
+                    var issues_id=disputeDive.attr("id");
+                    if($disputeEdit.find(".changed").length>0){
+                        layer.msg("请先保存修改");
+                        return;
+                    }
+                    if($disputeEdit.find(".new").length>0){
+                        layer.msg("请先保存新增");
+                        return;
+                    }
+                    if(!disputeDive.hasClass("correlated")){
+                        layer.msg("该争议点未关联当前文件，无法取消关联");
+                        return;
+                    }
+
+                    var issuesRelate = new Object();
+                    issuesRelate.issues_id=issues_id;
+
+                    var files = [];
+
+                    var fileExt = $.fileExt.curJObj;
+                    var fileid = fileExt.fileId;
+                    if(typeof fileid=="undefined"){
+                        layer.msg("未选择文件，无法关联争议点");
+                        return;
+                    }
+                    files.push(fileid);
+                    issuesRelate.file_id=files;
+                    $.disputeData.cancelRelateToFile(issuesRelate, function () {
+                        disputeDive.removeClass("correlated");
+
+                        var disputeListDiv = $(".displute-body").find(".dispute-div.active");
+                        var curDisputeId = disputeListDiv.attr("id");
+
+                        $.disputeData.getDisputeList($.dataTrans.caseInfoId);
+                        $.dispute.showDisputeList($.disputeData.getTDisputeList());
+                        $.dispute.onDisputeLinkClick($("#"+curDisputeId));
+                    });
+                });
+
+                $.dispute.showFileDisputeWindow();
+            });
+                    $(".ocrtext").bind("click", function () {
+                        var $ocrDiv = $("<div class='open-window'>\n" +
+                            "        <div class='' >\n" +
+                            "            <div class='open-title' style=''><span>识别结果</span></div>" +
+                            "            <div class='open-content'>" +
+                            "<span id='layermsg'>图片识别中，稍等片刻 <span id='sec'>0</span> 秒</span>"+
+                            "            </div>" +
+                            "            <div class='' style='bottom: 0px;right: 0px;'>" +
+                            "                <button class='open-btn open-close' style=''>关闭</button>" +
+                            "            </div>\n" +
+                            "        </div>\n" +
+                            "    </div>");
+
+                /*layer.open({
+                    type: 1,
+                    skin: 'layui-layer-rim', //加上边框
+                    area: ['720px', '450px'], //宽高
+                    content: "<span id='layermsg'>图片识别中，稍等片刻 <span id='sec'>0</span> 秒</span>"
+                });*/
+                var $shlter = $("<div style='width: 100%;height: 100%;position: absolute;top: 0px;left: 0px;" +
+                    "z-index: 20;background-color: #777;opacity: 0.5;filter:alpha(opacity=60);-moz-opacity: 0.5;'></div>");
+                $("body").append($ocrDiv);
+                $("body").append($shlter);
+                $ocrDiv.find(".open-close").bind("click",function () {
+                    $ocrDiv.remove();
+                    $shlter.remove();
+                });
+
+                var t=setInterval("$.dataTrans.showSecCourt()",1000)
+                var fileExt = $.fileExt.curJObj;
+                var fileid = fileExt.fileId;
+                var subCaseId = fileExt.subCaseId;
+                $.dataTrans.picOcrData(fileid, subCaseId, function (code, data) {
+                    window.clearInterval(t);
+                    if(code=="0"){
+                        $("#layermsg").text(data);
+                    }else {
+                        $("#layermsg").text("无法获取图片OCR识别结果");
+                    }
+                })
+            });
+            $(".pedit").click(function () {
+                if($(".back").hasClass("nousing")){
+                    //当前为预览状态，将切换为绘图
+                    $(".cshelter").show();
+                    $("#canvasBox").show();
+                    if($("#fileBox").find("img")&&$("#fileBox").find("img").length==0){
+                        return;
+                    }
+
+                    var newsrc = $("#fileBox").find("img").attr("src");
+                    if(newsrc==$.jCanvasExt.src){
+
+                    }else {
+                        $.jCanvasExt.loadImgDom("filecanvas", $("#fileBox").find("img")[0]);
+                    }
+
+                    /*$.canvasExt.loadImgUrl("filecanvas", $("#fileBox").find("img").attr("src"));*/
+                }else {
+                    $("#fileBox").find("canvas").hide();
+                }
+            });
+        },
+        bindCanvasBtn: function () {
+            var $squareBtn = $("#canvasBox .square");
+            var $circleBtn = $("#canvasBox .circle");
+            var $fontBtn = $("#canvasBox .font");
+            var $saveBtn = $("#canvasBox .save");
+            var $backBtn = $("#canvasBox .back");
+            $squareBtn.bind("click", function () {
+                var state = $.jCanvasExt.state;
+
+                var canvas=$("#filecanvas")[0];
+                canvas.onmousedown=undefined;
+                canvas.onmouseup=undefined;
+                canvas.onmousemove=undefined;
+
+                if(state==1){
+                    $.jCanvasExt.state=0;
+                    $("#canvasBox").find("button").removeClass("checkin");
+                }else {
+                    $.jCanvasExt.state=1;
+                    $("#canvasBox").find("button").removeClass("checkin");
+                    $squareBtn.addClass("checkin");
+
+                    $.jCanvasExt.drawRect("filecanvas", "red", 1);
+                }
+            });
+            $circleBtn.bind("click", function () {
+                var canvas=$("#filecanvas")[0];
+                canvas.onmousedown=undefined;
+                canvas.onmouseup=undefined;
+                canvas.onmousemove=undefined;
+
+                if($.jCanvasExt.state==2){
+                    $.jCanvasExt.state=0;
+                    $("#canvasBox").find("button").removeClass("checkin");
+                }else {
+                    $.jCanvasExt.state=2;
+                    $("#canvasBox").find("button").removeClass("checkin");
+                    $circleBtn.addClass("checkin");
+                    $.jCanvasExt.drawEllipse("filecanvas", "red", 1);
+                }
+            });
+            $fontBtn.bind("click", function () {
+                var canvas=$("#filecanvas")[0];
+                canvas.onmousedown=undefined;
+                canvas.onmouseup=undefined;
+                canvas.onmousemove=undefined;
+
+                if($.jCanvasExt.state==3){
+                    $.jCanvasExt.state=0;
+                    $("#canvasBox").find("button").removeClass("checkin");
+                }else {
+                    $.jCanvasExt.state=3;
+                    $("#canvasBox").find("button").removeClass("checkin");
+                    $fontBtn.addClass("checkin");
+                    $.jCanvasExt.drawText("filecanvas", "red", 1);
+                }
+            });
+            $saveBtn.bind("click", function () {
+                var canvas=$("#filecanvas")[0];
+                canvas.onmousedown=undefined;
+                canvas.onmouseup=undefined;
+                canvas.onmousemove=undefined;
+
+                $.dataTrans.uploadCanvasLayer();
+
+                $(".cshelter").hide();
+                $("#canvasBox").hide();
+            });
+            $backBtn.bind("click", function () {
+                $(".cshelter").hide();
+                $("#canvasBox").hide();
+            });
+        },
+        drawBtn: function () {
+            var toolBtn = this;
+
+            toolBtn.bindSearchBtn();
+            toolBtn.bindCoolAlbumBtn();
+            toolBtn.bindFileBoxBtn();
+            toolBtn.bindCanvasBtn();
+        }
+    }
+</script>
+</html>

@@ -1,0 +1,195 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>系统设置</title>
+    <link rel="stylesheet" href="../../plugin/easyui/easyui.css" />
+
+    <link rel="stylesheet" href="../../plugin/zTree3/css/zTreeStyle/zTreeStyle.css" />
+
+    <link rel="stylesheet" href="../../plugin/layer/skin/layer.css" />
+    <link rel="stylesheet" href="../../plugin/bootstrap/css/bootstrap.min.css" />
+    <link rel="stylesheet" href="../../plugin/bootstrap/css/font-awesome.min.css" />
+    <link rel="stylesheet" href="../../plugin/bootstrap/css/animate.css" />
+    <link rel="stylesheet" href="../../css/base.css">
+    <!-- <link rel="stylesheet" href="../../plugin/zTree3/css/metroStyle/metroStyle.css" /> -->
+
+    <link rel="stylesheet" href="./css/page.css">
+</head>
+
+<body class="clearfix" ng-app="myApp" ng-controller="appController">
+    <div class="left_box fl">
+        <ul class="left_box_menu">
+            <li class="active">
+                <a><span class="yonghu_icon"></span>配置管理</a>
+            </li>
+        </ul>
+    </div>
+    <div class="right_c_box fl">
+        <div class="r_header">
+            <p class="r_header_title"><span class="y_line"></span><span class="r_header_title_val">系统维护</span></p>
+            <div class="select_c_box select_c_box_court xt_repair">
+                <div class="select_box">
+                    <span>配置名称：</span>
+                    <div class="btn-group dropdown my-dropdown" id="dropdown">
+                        <div class="btn-group dropdown my-dropdown">
+                                <input ng-model="searchConfigName" placeholder="请输入配置名称" style="width: 214px;cursor:initial"
+                                    class="btn my-btn-default btn-default dropdown-toggle" type="text">
+                        </div>
+                    </div>
+                </div>
+                <button class="btn btn-info btn-sm my-search top_search" ng-click="search()">查询</button>
+            </div>
+        </div>
+        <div class="r_content">
+            <div class="r_content_tool clearfix">
+                <div class="my_bths fl">
+                    <button class="btn btn-info btn-sm my-search yh-my-search" ng-click="addNewConfig()"><span
+                            class="glyphicon glyphicon-plus"></span>新建</button>
+                    <button class="btn btn-info btn-sm my-search yh-my-search" ng-click="editConfig()"><span
+                            class="glyphicon glyphicon-pencil"></span>编辑</button>
+                    <button class="btn btn-info btn-sm my-search js-my-search" ng-click="jsaddNewUser()"><span
+                            class="glyphicon glyphicon-plus"></span>新建</button>
+                    <button class="btn btn-info btn-sm my-search js-my-search" ng-click="jseditUser()" ><span
+                            class="glyphicon glyphicon-pencil"></span>编辑</button>
+                    <button class="btn btn-info btn-sm my-search" ng-click="removeUser()"><span
+                            class="glyphicon glyphicon-trash"></span>删除</button>
+                </div>
+            </div>
+            <div class="t_content">
+                <table region="center" style="width:100%;min-height:500px;overflow: hidden" id="yichuli-table"
+                    class="easyui-datagrid">
+                </table>
+            </div>
+        </div>
+    </div>
+    <!-- 配置管理新增 -->
+    <div id="scopeForm" style="padding: 10px;float: left;width: 100%;display: none">
+        <form name="myForm-add">
+            <div class="form-group">
+                <label class="control-label col-xs-5">配置名称：</label>
+                <div class="row-180">
+                    <div class="input-group col-xs-12 input-group-sm">
+                        <input type="text" placeholder="请输入" style="width: 100%" class="form-control"
+                            data-toggle="dropdown" aria-haspopup="true" ng-model="addRow.propertyName">
+                    </div>
+                </div>
+            </div>
+            <div class="form-group">
+                <label class="control-label col-xs-5">配置修改：</label>
+                <div class="row-180">
+                    <div class="input-group col-xs-12 input-group-sm">
+                        <input type="text" placeholder="请选择" class="form-control IsRrpair_val" data-toggle="dropdown"
+                            readonly="readonly" aria-haspopup="true" ng-model="addRow.updateFlagName">
+                        <ul class="dropdown-menu" aria-labelledby="dropdownMenu1">
+                            <li><a href="javascript:void(0)" ng-repeat="item in IsRrpairList" title={{item.title}}
+                                    ng-click="_selUpdateFlag(item)">{{item.title}}</a></li>
+                        </ul>
+                        <span class="input-group-addon" data-toggle="dropdown" aria-haspopup="true"
+                            aria-expanded="false"><span class="caret"></span></span>
+                    </div>
+                </div>
+            </div>
+            <div class="form-group">
+                <label class="control-label col-xs-5"><em></em>配置描述：</label>
+                <div class="row-180">
+                    <textarea rows="4" cols="30" class="form-control col-xs-8" ng-model="addRow.propertyDesc" type="text"></textarea>
+                </div>
+            </div>
+            <div class="form-group">
+                <label class="control-label col-xs-5"><em></em>配置值：</label>
+                <div class="row-180">
+                    <textarea rows="4" cols="30" class="form-control col-xs-8" ng-model="addRow.propertyValue" type="text"></textarea>
+                </div>
+            </div>
+            <div class="form-group text-center" style="margin-bottom: 0;width: 95%;margin-top: 15px;">
+                <button class="btn btn-info btn-sm b_60px" ng-click="saveNewFlag()" style="margin-left: 15px">保存</button>
+                <button class="btn btn-info btn-sm b_60px" ng-click="cancelsaveUser()"
+                    style="margin-left: 15px">取消</button>
+            </div>
+        </form>
+    </div>
+    <!-- 配置管理修改 -->
+    <div id="editForm" style="padding: 10px;float: left;width: 100%;display: none">
+        <form name="jsForm-add">
+            <div class="form-group">
+                <label class="control-label col-xs-5">配置名称：</label>
+                <div class="row-180">
+                    <div class="input-group col-xs-12 input-group-sm">
+                        <input type="text" placeholder="请输入" style="width: 95%" class="form-control"
+                            data-toggle="dropdown" aria-haspopup="true" ng-model="editParam.propertyName">
+                    </div>
+                </div>
+            </div>
+            <div class="form-group">
+                <label class="control-label col-xs-5">配置修改：</label>
+                <div class="row-180">
+                    <div class="input-group col-xs-12 input-group-sm">
+                        <input type="text" placeholder="请选择" class="form-control" data-toggle="dropdown"
+                            readonly="readonly" aria-haspopup="true" ng-model="editParam.updateFlagName">
+                        <ul class="dropdown-menu" aria-labelledby="dropdownMenu1">
+                            <li><a href="javascript:void(0)" ng-repeat="item in IsRrpairList" title={{item.title}}
+                                    ng-click="_selUpdateFlag_edit(item)">{{item.title}}</a></li>
+                        </ul>
+                        <span class="input-group-addon" data-toggle="dropdown" aria-haspopup="true"
+                            aria-expanded="false"><span class="caret"></span></span>
+                    </div>
+                </div>
+            </div>
+            <div class="form-group">
+                <label class="control-label col-xs-5"><em></em>配置描述：</label>
+                <div class="row-180">
+                    <textarea rows="4" cols="30" class="form-control col-xs-8" ng-model="editParam.propertyDesc" type="text"></textarea>
+                </div>
+            </div>
+            <div class="form-group">
+                <label class="control-label col-xs-5"><em></em>配置值：</label>
+                <div class="row-180">
+                    <textarea rows="4" cols="30" class="form-control col-xs-8" ng-model="editParam.propertyValue" type="text"></textarea>
+                </div>
+            </div>
+            <div class="form-group text-center" style="margin-bottom: 0;width: 95%;margin-top: 15px;">
+                <button class="btn btn-info btn-sm b_60px" ng-click="saveEditFlag()" style="margin-left: 15px">保存</button>
+                <button class="btn btn-info btn-sm b_60px" ng-click="cancelsaveUser()"
+                    style="margin-left: 15px">取消</button>
+            </div>
+        </form>
+    </div>
+
+    <div id="delForm" style="padding: 10px;float: left;width: 100%;display: none">
+        <form name="myForm">
+            <div class="form-group" style="text-align: center;font-size: 16px;margin-top: 5px">
+                确认删除?
+            </div>
+            <div class="form-group text-center" style="margin-top: 10px;margin-bottom: 0;width: 95%;">
+
+                <button class="btn btn-info btn-sm b_20px" ng-click="_userdel()"
+                    style="width:100px;margin-left: 15px">确定</button>
+                <button class="btn btn-info btn-sm b_20px" ng-click="canceldeluser()"
+                    style="width:100px;margin-left: 15px">取消</button>
+            </div>
+
+        </form>
+    </div>
+    <my-pager ng-show="true"></my-pager>
+</body>
+<script type="text/javascript" src="../../plugin/jquery/jquery.min.js"></script>
+<script type="text/javascript" src="../../plugin/jquery/jquery.validate.js"></script>
+<script type="text/javascript" src="../../plugin/jquery/messages_zh.js"></script>
+<script type="text/javascript" src="../../plugin/angular/angular.min.js"></script>
+<script type="text/javascript" src="../../plugin/angular/angular-ui-router.min.js"></script>
+<script type="text/javascript" src="../../plugin/angular/angular-sanitize.min.js"></script>
+<script type="text/javascript" src="../../plugin/bootstrap/js/bootstrap.min.js"></script>
+<script type="text/javascript" src="../../plugin/easyui/jquery.easyui.min.js"></script>
+<script type="text/javascript" src="../../js/app_directives.js"></script>
+<script type="text/javascript" src="../../js/app_controllers.js"></script>
+<script type="text/javascript" src="../../js/app_services.js"></script>
+<script type="text/javascript" src="../../plugin/layer/layer.min.js"></script>
+<script src="../../plugin/zTree3/js/jquery.ztree.all.min.js"></script>
+<script type="text/javascript" src="./js/columnsData.js"></script>
+<script type="text/javascript" src="./js/page.js"></script>
+
+</html>

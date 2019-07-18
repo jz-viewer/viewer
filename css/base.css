@@ -1,0 +1,221 @@
+html,
+body {
+  width: 100%;
+  /* width: 1880px; */
+  background: transparent;
+  color: #fff;
+  height: 100%;
+}
+body {
+  width: 100%;
+  margin: 0;
+  padding: 29px;
+  font: 14px Hiragino Sans GB, 微软雅黑, Open Sans, Verdana, arial, "\5b8b\4f53",
+    sans-serif;
+  background: transparent;
+}
+div,
+dl,
+dt,
+dd,
+ul,
+ol,
+li,
+h1,
+h2,
+h3,
+h4,
+h5,
+h6,
+pre,
+form,
+fieldset,
+input,
+textarea,
+blockquote,
+p {
+  padding: 0;
+  margin: 0;
+}
+table,
+td,
+tr,
+th {
+  font-size: 12px;
+}
+li {
+  list-style-type: none;
+}
+img {
+  vertical-align: top;
+  border: 0;
+}
+ol,
+ul {
+  list-style: none;
+}
+h1,
+h2,
+h3,
+h4,
+h5,
+h6 {
+  font-size: 12px;
+  font-weight: normal;
+}
+address,
+cite,
+code,
+em,
+th {
+  font-weight: normal;
+  font-style: normal;
+}
+a {
+  margin: 0;
+  padding: 0;
+  border: 0;
+  font-size: 100%;
+  vertical-align: baseline;
+  background: transparent;
+}
+a:hover,
+a:focus {
+  text-decoration: none;
+  bblr: expression(this.onFocus=this.blur()); /*IE*/
+  outline-style: none; /*FF*/
+}
+
+table {
+  border-collapse: collapse;
+  border-spacing: 0;
+}
+
+input,
+select {
+  vertical-align: middle;
+}
+
+.fl {
+  float: left;
+}
+
+.fr {
+  float: right;
+}
+
+/*css为clearfix，清除浮动*/
+.clearfix::before,
+.clearfix::after {
+  content: "";
+  height: 0;
+  line-height: 0;
+  display: block;
+  visibility: hidden;
+  clear: both;
+}
+
+.clearfix:after {
+  clear: both;
+}
+
+.clearfix {
+  *zoom: 1; /*IE/7/6*/
+}
+
+.abso {
+  position: absolute;
+}
+
+.rela {
+  position: relative;
+}
+
+#myPager {
+  float: right;
+  width: 90%;
+  padding: 4px 5px;
+  text-align: center;
+  background-color: transparent;
+  color: #333;
+  margin-top: 0px;
+}
+#myPager .page-size {
+  float: left;
+}
+#myPager .page-bar {
+  display: inline-block;
+  position: relative;
+  vertical-align: middle;
+  width: 350px;
+  margin: 0 auto;
+  float: left;
+  margin-left: 50px;
+}
+#myPager .page-bar i {
+  width: 30px;
+  height: 30px;
+  cursor: pointer;
+  text-align: center;
+  line-height: 30px;
+  color: #fff;
+  margin: 0 5px;
+  float: left;
+}
+#myPager .page-bar i:hover {
+  opacity: 0.8;
+}
+#myPager .page-bar input {
+  float: left;
+  width: 65px;
+  text-align: center;
+  height: 30px;
+  background: transparent;
+  color: #fff;
+  border-color: #1c7dfa;
+}
+#myPager .page-bar label {
+  float: left;
+  line-height: 30px;
+  padding: 0 5px;
+  color: #fff;
+  border-color: #1c7dfa;
+}
+
+#myPager .btn-default:hover,
+#myPager .btn-default.focus,
+#myPager .btn-default:focus {
+  opacity: 0.5;
+  background: transparent;
+  color: #fff;
+  border-color: #1c7dfa;
+}
+
+#myPager .mysx {
+  color: #fff;
+  float: left;
+  margin-right: 14px;
+  height: 30px;
+  line-height: 30px;
+}
+
+#myPager .pagination-info {
+  float: left;
+  margin: 0 6px 0 0;
+  padding: 0;
+  height: 30px;
+  line-height: 30px;
+  font-size: 12px;
+  color: #fff;
+  margin-right: 150px;
+}
+
+.datagrid-row,
+.datagrid-header-row {
+  height: 47px !important;
+}
+
+@page {
+  margin: 0;
+}
+

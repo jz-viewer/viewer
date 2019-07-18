@@ -1,0 +1,498 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>用户管理</title>
+    <link rel="stylesheet" href="../../plugin/easyui/easyui.css" />
+    <link rel="stylesheet" href="../../plugin/zTree3/css/zTreeStyle/zTreeStyle.css" />
+    <link rel="stylesheet" href="../../plugin/layer/skin/layer.css" />
+    <link rel="stylesheet" href="../../plugin/bootstrap/css/bootstrap.min.css" />
+    <link rel="stylesheet" href="../../plugin/bootstrap/css/font-awesome.min.css" />
+    <link rel="stylesheet" href="../../plugin/bootstrap/css/animate.css" />
+    <link rel="stylesheet" href="../../css/base.css">
+    <link rel="stylesheet" href="./css/page.css">
+</head>
+
+<body class="clearfix" ng-app="myApp" ng-controller="appController">
+    <div class="left_box fl">
+        <ul class="left_box_menu">
+            <li class="active">
+                <a><span class="yonghu_icon"></span>用户管理</a>
+            </li>
+            <li>
+                <a><span class="jiagou_icon"></span>组织架构</a>
+            </li>
+            <li>
+                <a><span class="juese_icon"></span>角色管理</a>
+            </li>
+        </ul>
+    </div>
+    <div class="right_c_box fl">
+        <div class="r_header">
+            <p class="r_header_title"><span class="y_line"></span><span class="r_header_title_val">用户管理</span></p>
+            <div class="select_c_box select_c_box_court">
+                <div class="select_box select_box_room"><span>法<i style="visibility: hidden">占位</i>院：</span>
+                    <div class="btn-group dropdown my-dropdown" id="dropdown">
+                        <input readonly="readonly" placeholder="请选择法院" ng-model="courts_text" type="input"
+                            class="btn my-btn-default btn-default dropdown-toggle " data-toggle="dropdown"
+                            aria-haspopup="true" aria-expanded="false">
+                        </input>
+                        <input type="hidden" name="hidedrop_1" id="hidedrop_1" value="超级管理员" />
+                        <div class="dropdown-menu b_ul_menu tingshi_drop">
+                            <ul class="b_ul_menu tingshi_ul">
+                                <li ng-repeat="item in allCourt" ng-click="courtClic(item)"><a
+                                        href="#">{{item.courtName}}</a></li>
+                            </ul>
+                        </div>
+                        <span class="input-group-addon" data-toggle="dropdown" aria-haspopup="true"
+                            aria-expanded="true">
+                            <span class="caret ng-hide" ng-show="!courts_text"></span>
+                            <i class="fa fa-close" ng-show="courts_text" ng-click="clearCourtName()"></i>
+                        </span>
+                    </div>
+                </div>
+                <div class="select_box select_box_room"><span>庭<i style="visibility: hidden">占位</i>室：</span>
+                    <div class="btn-group dropdown my-dropdown search_tingshi" id="dropdown">
+                        <input readonly="readonly" placeholder="请选择庭室" ng-model="roomName" type="input"
+                            class="btn my-btn-default btn-default dropdown-toggle "  data-toggle="dropdown"
+                            aria-haspopup="true" aria-expanded="false">
+                        </input>
+                        <input type="hidden" name="hidedrop_1" id="hidedrop_1" value="超级管理员" />
+                        <div class="dropdown-menu b_ul_menu tingshi_drop">
+                            <ul class="b_ul_menu tingshi_ul">
+                                <li ng-repeat="item in roomsArr" ng-click="roomClic(item)"><a
+                                        href="#">{{item.courtRoomName}}</a></li>
+                            </ul>
+                        </div>
+                        <span class="input-group-addon" data-toggle="dropdown" aria-haspopup="true"
+                            aria-expanded="true">
+                            <span class="caret ng-hide" ng-show="!roomName"></span>
+                            <i class="fa fa-close" ng-show="roomName" ng-click="clearRoomName()"></i>
+                        </span>
+                    </div>
+                </div>
+                <div class="select_box select_box_cbr"><span style="left: 0;"><span>角<i
+                                style="visibility: hidden">占位</i>色：</span>
+                        <div class="btn-group dropdown my-dropdown" id="dropdown">
+                            <!-- <input type="text" placeholder="请选择" class="form-control add_role" data-toggle="dropdown"
+                                readonly="readonly" aria-haspopup="true" style="width: 100%;" ng-model="addRow.roleNames"> -->
+                            <!-- <input ng-model="roleName" readonly="readonly" placeholder="请选择角色" type="input"
+                                class="btn my-btn-default btn-default dropdown-toggle add_role" data-toggle="dropdown"
+                                aria-haspopup="true" aria-expanded="false">
+                            </input>
+                            <ul class="dropdown-menu" aria-labelledby="dropdownMenu1" style="height:100px;">
+                                <li ng-repeat="item in add_roleList">
+                                    <a href="javascript:void(0)" ng-click="_searchRoleId(item)">{{item.roleName}}</a>
+                                </li>
+                            </ul>
+                            <span class="input-group-addon" data-toggle="dropdown" aria-haspopup="true"
+                                aria-expanded="false" style="display: none"><span class="caret"></span></span> -->
+                            <input ng-model="roleName" readonly="readonly" placeholder="请选择角色" type="input"
+                                class="btn my-btn-default btn-default dropdown-toggle" data-toggle="dropdown"
+                                aria-haspopup="true" aria-expanded="false">
+                            </input>
+                            <input type="hidden" name="hidedrop_1" id="hidedrop_1" value="超级管理员" />
+                            <ul class="dropdown-menu b_ul_menu">
+                                <li ng-repeat="item in roleList" ng-click="roleClic(item)"><a
+                                        href="#">{{item.roleName}}</a></li>
+                            </ul>
+                            <span class="input-group-addon" data-toggle="dropdown" aria-haspopup="true"
+                                aria-expanded="true">
+                                <span class="caret ng-hide" ng-show="!roleName"></span>
+                                <i class="fa fa-close" ng-show="roleName" ng-click="clearRoleName()"></i>
+                            </span>
+                        </div>
+                </div>
+                <div class="select_box">
+                    <!-- <span class="control-label">案<i style="visibility: hidden">占位</i>号：</!-->
+                    <div class="btn-group dropdown my-dropdown">
+                        <input ng-model="param.inputName" placeholder="请输入用户名或姓名" style="width: 214px;cursor:initial"
+                            class="btn my-btn-default btn-default dropdown-toggle" type="text">
+                    </div>
+                </div>
+                <button class="btn btn-info btn-sm my-search top_search" ng-click="search()">查询</button>
+            </div>
+        </div>
+        <div class="r_content">
+            <div class="r_content_tool clearfix">
+                <div class="my_bths fl">
+                    <button class="btn btn-info btn-sm my-search yh-my-search" ng-click="addNewUser()"><span
+                            class="glyphicon glyphicon-plus"></span>新建</button>
+                    <button class="btn btn-info btn-sm my-search yh-my-search" ng-click="editUser()"><span
+                            class="glyphicon glyphicon-pencil"></span>编辑</button>
+                    <button class="btn btn-info btn-sm my-search js-my-search" ng-click="jsaddNewUser()"><span
+                            class="glyphicon glyphicon-plus"></span>新建</button>
+                    <button class="btn btn-info btn-sm my-search js-my-search" ng-click="jseditUser()"><span
+                            class="glyphicon glyphicon-pencil"></span>编辑</button>
+                    <button class="btn btn-info btn-sm my-search" ng-click="removeUser()"><span
+                            class="glyphicon glyphicon-trash"></span>删除</button>
+                </div>
+            </div>
+            <div class="t_content _table">
+                <table region="center" style="width:100%;min-height:500px;overflow: hidden" id="yichuli-table"
+                    class="easyui-datagrid">
+                </table>
+            </div>
+        </div>
+        <div class="r_zzjg" >
+            <div class="t_content zzjg">
+                <div class="zzjgForm_left">
+                    <h3>所属单位</h3>
+                    <ul class="ztree r_zzjg_ul" id="zzjg_tree"></ul>
+                </div>
+                <div class="zzjgForm_middle">
+                    <h3>所属部门</h3>
+                    <ul class="ztree r_zzjg_ul" id="zzjg_tree_right" ></ul>
+                </div>
+                <div class="zzjgForm_right " >
+                    <h3>所属用户</h3>
+                    <ol>
+                        <li ng-repeat="item in zzjg_courtroomUserList" id={{item.roleIds}}>
+                                <a href="javascript:void(0)" >{{item.userFullName}}</a>
+                        </li>
+                    </ol>
+                </div>
+            </div>
+        </div>
+    </div>
+<!-- 用户管理新增 -->
+    <div id="scopeForm" style="padding: 10px;float: left;width: 100%;display: none;overflow: hidden;">
+        <form name="myForm-add">
+            <div class="form-group">
+                <label class="control-label col-xs-5">归属法院：</label>
+                <div class="row-180">
+                    <div class="input-group col-xs-12 input-group-sm ">
+                        <input type="input" placeholder="请选择" class="form-control add_court" data-toggle="dropdown"
+                            readonly="readonly" aria-haspopup="true" style="width: 100%" ng-model="addRow.courtName">
+                        <!-- 树形展示 -->
+                        <ul class="dropdown-menu ztree" id="treeDemo" aria-labelledby="dropdownMenu1" style="overflow-x: hidden;">
+                        </ul>
+                        <!-- 平铺展示 -->
+                        <!-- <ul class="dropdown-menu"  aria-labelledby="dropdownMenu1">
+                            <li ng-repeat="item in allCourt" ng-click="addcourtClic(item)" title={{item.courtName}}>
+                                <a href="#">{{item.courtName}}</a></li>
+                        </ul> -->
+                        <span class="input-group-addon" data-toggle="dropdown" aria-haspopup="true" style="display: none"
+                            aria-expanded="false" ><span class="caret"></span></span>
+                    </div>
+                </div>
+            </div>
+            <div class="form-group">
+                <label class="control-label col-xs-5">庭室名称：</label>
+                <div class="row-180">
+                    <div class="input-group col-xs-12 input-group-sm">
+                        <input type="text" placeholder="请选择" class="form-control add_tingshi" data-toggle="dropdown"
+                            readonly="readonly" aria-haspopup="true" style="width: 100%;" ng-model="addRow.courtRoomName">
+                        <ul class="dropdown-menu" aria-labelledby="dropdownMenu1">
+                            <li ng-repeat="item in courtroomList">
+                                <a href="javascript:void(0)" ng-click="_selCourtRoom(item)">{{item.courtRoomName}}</a></li>
+                        </ul>
+                        <span class="input-group-addon" data-toggle="dropdown" aria-haspopup="true"
+                            aria-expanded="false" style="display: none"><span class="caret"></span></span>
+                    </div>
+                </div>
+            </div>
+            <div class="form-group">
+                <label class="control-label col-xs-5"><em></em>用户名：</label>
+                <div class="row-180">
+                    <input class="form-control col-xs-8" placeholder="请输入" type="text" ng-model="addRow.userName"
+                        ng-readonly="userAccountReadOnly" />
+                </div>
+            </div>
+            <div class="form-group">
+                <label class="control-label col-xs-5"><em></em>姓名：</label>
+                <div class="row-180">
+                    <input class="form-control col-xs-8" placeholder="请输入" type="text" ng-model="addRow.userFullName"
+                        ng-readonly="userAccountReadOnly" />
+                </div>
+            </div>
+            <div class="form-group">
+                <label class="control-label col-xs-5"><em></em>角色：</label>
+                <div class="row-180">
+                    <div class="input-group col-xs-12 input-group-sm DIV_roleAdd">
+                        <!-- <input type="text" placeholder="请选择" class="form-control add_role" data-toggle="dropdown"
+                            readonly="readonly" aria-haspopup="true" style="width: 100%;" ng-model="addRow.roleNames">
+                             newUl 
+                            <ul class="dropdown-menu" aria-labelledby="dropdownMenu1" style="height:75px;">
+                                <li ng-repeat="item in add_roleList">
+                                    <a href="javascript:void(0)" ng-click="_addRoleId(item)">{{item.roleName}}</a>
+                                </li>
+                            </ul> -->
+                            <!--- oldUl -->
+                            <!-- <ul class="dropdown-menu b_ul_menu" aria-labelledby="dropdownMenu1">
+                                    <li ng-repeat="item in roleList" ng-click="roleClic(item)">
+                                        <a href="#">{{item.roleName}}</a>
+                                    </li>
+                            </ul> -->
+                       
+                        <!-- 多选 -->
+                        <input type="text" placeholder="请选择" class="form-control add_role" data-toggle="dropdown" style="width: 100%"
+                            readonly="readonly" aria-haspopup="true" ng-model="addRow.roleNames">
+                        <ul class="dropdown-menu roloQX_class" aria-labelledby="dropdownMenu1" style="height:70px;">
+                            <!-- <li class="role_qxClass" ng-repeat="item in roleList" >add_roleList -->
+                                <li class="role_qxClass" ng-repeat="item in add_roleList" >
+                                <label class="checkbox-inline role_qxClass" style="display: block" >
+                                    <input type="checkbox" ng-click="_selCourtRole_Add(item)" class="role_checkIput" value={{item.roleName}} style="top:-3px;">{{item.roleName}}
+                                </label>
+                            </li>
+                        </ul>
+                        <span class="input-group-addon" data-toggle="dropdown" aria-haspopup="true"
+                            aria-expanded="false" style="display: none"><span class="caret"></span></span>
+                    </div>
+                </div>
+            </div>
+            <div class="form-group text-center" style="margin-bottom: 0;width: 95%;margin-top: 15px;">
+                <button class="btn btn-info btn-sm b_60px" ng-click="saveUser()" style="margin-left: 15px">保存</button>
+                <button class="btn btn-info btn-sm b_60px" ng-click="cancelsaveUser()"
+                    style="margin-left: 15px">取消</button>
+            </div>
+        </form>
+    </div>
+<!-- 用户管理编辑 -->
+    <div id="editForm" style="padding: 10px;float: left;width: 100%;display: none;overflow: hidden;">
+        <form name="myForm-edit">
+            <div class="form-group">
+                <label class="control-label col-xs-5">归属法院：</label>
+                <div class="row-180">
+                    <div class="input-group col-xs-12 input-group-sm ">
+                        <input type="text" placeholder="请选择" class="form-control add_court" data-input="edit_input" data-toggle="dropdown"
+                            readonly="readonly" aria-haspopup="true" ng-model="addRow.courtName" style="width: 100%">
+                        <ul class="dropdown-menu ztree" id="edit_treeDemo" aria-labelledby="dropdownMenu1" ng-click="_editCourtName()" style="overflow-x: hidden;">
+                        </ul>
+                        <span class="input-group-addon" data-toggle="dropdown" style="display: none" aria-haspopup="true"
+                            aria-expanded="false"><span class="caret"></span></span>
+                    </div>
+                </div>
+            </div>
+            <div class="form-group">
+                <label class="control-label col-xs-5">庭室名称：</label>
+                <div class="row-180">
+                    <div class="input-group col-xs-12 input-group-sm">
+                        <input type="text" placeholder="请选择" class="form-control add_tingshi" data-toggle="dropdown"
+                        readonly="readonly" aria-haspopup="true" ng-model="addRow.courtRoomName" style="width: 100%">
+                            <!-- readonly="readonly" aria-haspopup="true" ng-model="addRow.court_room_id_text"> -->
+                        <ul class="dropdown-menu" aria-labelledby="dropdownMenu1">
+                            <li ng-repeat="item in courtroomList" ng-click="_selCourtRoom(item)">
+                                <a href="javascript:void(0)" >{{item.courtRoomName}}</a>
+                            </li>
+                                    
+                        </ul>
+                        <span class="input-group-addon" data-toggle="dropdown" aria-haspopup="true" style="display: none"
+                            aria-expanded="false"><span class="caret caret_tingshi"></span></span>
+                    </div>
+                </div>
+            </div>
+            <div class="form-group">
+                <label class="control-label col-xs-5"><em></em>用户名：</label>
+                <div class="row-180">
+                    <!-- <input class="form-control col-xs-8" placeholder="请输入" type="text" ng-model="addRow.user_name"  title="用户名不可修改" disabled="true"-->
+                    <input class="form-control col-xs-8" title="用户名不可修改" disabled="true"  placeholder="请输入" type="text" ng-model="addRow.userName"  />
+                </div>
+            </div>
+            <div class="form-group">
+                <label class="control-label col-xs-5"><em></em>用户密码：</label>
+                <div class="row-180">
+                    <input class="form-control col-xs-8 psw" placeholder="请输入" type="password" ng-readonly="userAccountReadOnly" />
+                        <!-- ng-model="addRow.userPassword" -->
+                </div>
+            </div>
+            <div class="form-group">
+                <label class="control-label col-xs-5"><em></em>姓名：</label>
+                <div class="row-180">
+                        <!-- <input class="form-control col-xs-8" placeholder="请输入" type="text" ng-model="addRow.user_name" -->
+                        <input class="form-control col-xs-8" placeholder="请输入" type="text" ng-model="addRow.userFullName" ng-readonly="userAccountReadOnly" />
+                    </div>
+            </div>
+            <div class="form-group">
+                <label class="control-label col-xs-5"><em></em>角色：</label>
+                <div class="row-180">
+                    <div class="input-group col-xs-12 input-group-sm DIV_roleAdd" id="UserEdit_div">
+                        <!-- <input type="text" placeholder="请选择" class="form-control add_role" data-torole_id_textggle="dropdown"
+                            readonly="readonly" aria-haspopup="true" ng-model="addRow.roleNames"> -->
+                            <!-- <input type="text" placeholder="请选择" class="form-control add_role" data-toggle="dropdown"
+                            readonly="readonly" aria-haspopup="true" ng-model="addRow.roleNames">
+                            <ul class="dropdown-menu" aria-labelledby="dropdownMenu1" style="height:61px;">
+                                    <li ng-repeat="item in add_roleList">
+                                        <a href="javascript:void(0)" ng-click="_addRoleId(item)">{{item.roleName}}</a>
+                                    </li>
+                            </ul> -->
+                        <!-- <ul class="dropdown-menu" aria-labelledby="dropdownMenu1">
+                            <li><a href="javascript:void(0)" ng-repeat="item in roleList"
+                                    ng-click="roleNameClick(item)">{{item.roleName}}</a></li>
+                        </ul> -->
+                        <!-- 角色单选 -->
+                        <!-- <input type="text" placeholder="请选择" class="form-control add_role" data-toggle="dropdown" style="width: 100%"
+                            readonly="readonly" aria-haspopup="true" ng-model="addRow.roleNames">
+                        <ul class="dropdown-menu" aria-labelledby="dropdownMenu1" style="height:70px;">
+                            <li ng-repeat="item in add_roleList">
+                                <a href="javascript:void(0)" ng-click="_addRoleId(item)">{{item.roleName}}</a>
+                            </li>
+                        </ul> -->
+                        <!-- 角色多选 -->
+                        <input type="text" placeholder="请选择" class="form-control add_role edit_role" data-toggle="dropdown" style="width: 100%"
+                        readonly="readonly" aria-haspopup="true" ng-model="addRow.roleNames">
+                        <ul class="dropdown-menu roloQX_class" aria-labelledby="dropdownMenu1" style="height:70px;">
+                            <li class="role_qxClass" ng-repeat="item in add_roleList" >
+                                <label class="checkbox-inline role_qxClass" style="display: block" >
+                                    <input type="checkbox" ng-click="_selCourtRole_edit(item)" class="role_checkIput" value={{item.roleName}} style="top:-3px;">{{item.roleName}}
+                                </label>
+                            </li>
+                        </ul>
+                        <span class="input-group-addon" data-toggle="dropdown" aria-haspopup="true" style="display: none"
+                            aria-expanded="false"><span class="caret"></span></span>
+                    </div>
+                </div>
+            </div>
+            <div class="form-group text-center" style="margin-bottom: 0;width: 95%;margin-top: 10px;">
+                <button class="btn btn-info btn-sm b_60px" ng-click="usertEdit()" style="margin-left: 15px">保存</button>
+                <button class="btn btn-info btn-sm b_20px" ng-click="cancelsaveUser()"
+                    style="margin-left: 15px">取消</button>
+            </div>
+        </form>
+    </div>
+<!-- 角色管理新增 -->
+    <div id="scopeJsForm" style="padding: 10px;float: left;width: 100%;display: none">
+        <form name="myForm-add">
+            <div class="form-group">
+                <label class="control-label col-xs-5">角色名称：</label>
+                <div class="row-180">
+                    <div class="input-group col-xs-12 input-group-sm">
+                        <input type="text" placeholder="请输入" style="width: 95%" class="form-control"
+                            data-toggle="dropdown" aria-haspopup="true" ng-model="addRow.roleName">
+                        <!-- <div class="input-group col-xs-12 input-group-sm">
+                        <input type="text" placeholder="请选择" class="form-control" data-toggle="dropdown"
+                            readonly="readonly" aria-haspopup="true" ng-model="addRow.court_id_text"> -->
+
+                        <!-- <ul class="dropdown-menu" aria-labelledby="dropdownMenu1">
+                            <li><a href="javascript:void(0)" ng-repeat="item in courtList"
+                                    ng-click="_selCourtId(item)">{{item.court_name}}</a></li>
+                        </ul> -->
+                        <!-- <span class="input-group-addon" data-toggle="dropdown" aria-haspopup="true"
+                            aria-expanded="false"><span class="caret"></span></span> -->
+                    </div>
+                </div>
+            </div>
+            <div class="form-group">
+                <label class="control-label col-xs-5">角色权限：</label>
+                <div class="row-180">
+                    <div class="input-group col-xs-12 input-group-sm" id="DIV_roleQxAdd">
+                        <input type="text" placeholder="请选择" class="form-control js_qx" data-toggle="dropdown" style="width: 100%"
+                            readonly="readonly" aria-haspopup="true" ng-model="addRow.menuNames">
+                        <ul class="dropdown-menu roloQX_class" aria-labelledby="dropdownMenu1">
+                            <li class="role_qxClass" ng-repeat="(key,item) in role_qxList" >
+                                <label class="checkbox-inline role_qxClass" style="display: block" >
+                                    <input type="checkbox" ng-click="_selCourtRole_qx(item)" class="role_checkIput" value={{item.menuName}} style="top:3px;">{{item.menuName}}
+                                </label>
+                            </li>
+                        </ul>
+                        <span class="input-group-addon" style="display: none" data-toggle="dropdown" aria-haspopup="true"
+                            aria-expanded="false"><span class="caret"></span></span>
+                    </div>
+                </div>
+            </div>
+            <div class="form-group">
+                <label class="control-label col-xs-5"><em></em>角色描述：</label>
+                <div class="row-180">
+                    <textarea rows="4" cols="30" class="form-control col-xs-8" type="text" ng-model="addRow.roleDesc"></textarea>
+                </div>
+            </div>
+            <div class="form-group">
+                <label class="control-label col-xs-5"><em></em>权限描述：</label>
+                <div class="row-180">
+                    <textarea rows="4" cols="30" class="form-control col-xs-8" type="text" ng-model="addRow.rolePermissionDesc"></textarea>
+                </div>
+            </div>
+            <div class="form-group text-center" style="margin-bottom: 0;width: 95%;margin-top: 15px;">
+                <button class="btn btn-info btn-sm b_60px" ng-click="saveRole()" style="margin-left: 15px">保存</button>
+                <button class="btn btn-info btn-sm b_60px" ng-click="cancelsaveUser()"
+                    style="margin-left: 15px">取消</button>
+            </div>
+        </form>
+    </div>
+ 
+<!-- 角色管理编辑  -->
+    <div id="editJsForm" style="padding: 10px;float: left;width: 100%;display: none">
+        <form name="jsForm-add">
+                <div class="form-group">
+                        <label class="control-label col-xs-5">角色名称：</label>
+                        <div class="row-180">
+                            <div class="input-group col-xs-12 input-group-sm">
+                                <input type="text" placeholder="请输入" style="width: 95%" class="form-control"
+                                    data-toggle="dropdown" aria-haspopup="true" ng-model="addRow.roleName">
+                            </div>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label class="control-label col-xs-5">角色权限：</label>
+                        <div class="row-180">
+                            <div class="input-group col-xs-12 input-group-sm" id="DIV_roleEdit">
+                                <input type="text" placeholder="请选择" class="form-control js_qxEdit" data-toggle="dropdown" style="width: 100%"
+                                    readonly="readonly" aria-haspopup="true" ng-model="addRow.menuNames">
+                                <ul class="dropdown-menu roloQX_class" aria-labelledby="dropdownMenu1">
+                                    <li class="role_qxClass" ng-repeat="(key,item) in role_qxList">
+                                        <label class="checkbox-inline" style="display: block">
+                                            <input type="checkbox" ng-click="_EditSelCourtRole_qx(item)" class="role_checkIput" value={{item.menuName}} style="top:3px;">{{item.menuName}}
+                                        </label>
+                                    </li>
+                                </ul>
+                                <span class="input-group-addon" data-toggle="dropdown" aria-haspopup="true" style="display: none"
+                                    aria-expanded="false"><span class="caret"></span></span>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label class="control-label col-xs-5"><em></em>角色描述：</label>
+                        <div class="row-180">
+                            <textarea rows="4" cols="30" class="form-control col-xs-8" type="text" ng-model="addRow.roleDesc"></textarea>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label class="control-label col-xs-5"><em></em>权限描述：</label>
+                        <div class="row-180">
+                            <textarea rows="4" cols="30" class="form-control col-xs-8" type="text" ng-model="addRow.rolePermissionDesc"></textarea>
+                        </div>
+                    </div>
+            <div class="form-group text-center" style="margin-bottom: 0;width: 95%;margin-top: 15px;">
+                <button class="btn btn-info btn-sm b_60px" ng-click="saveEditRole()" style="margin-left: 15px">保存</button>
+                <button class="btn btn-info btn-sm b_60px" ng-click="cancelsaveUser()"
+                    style="margin-left: 15px">取消</button>
+            </div>
+        </form>
+    </div>
+    <div id="delForm" style="padding: 10px;float: left;width: 100%;display: none">
+        <form name="myForm">
+            <div class="form-group" style="text-align: center;font-size: 16px;margin-top: 5px">
+                确认删除?
+            </div>
+            <div class="form-group text-center" style="margin-top: 10px;margin-bottom: 0;width: 95%;">
+                <!-- <button class="btn btn-info btn-sm b_20px" ng-click="_userdel()" -->
+                <button class="btn btn-info btn-sm b_20px" ng-click="querenRemoveUser()"
+                    style="width:100px;margin-left: 15px">确定</button>
+                <button class="btn btn-info btn-sm b_20px" ng-click="canceldeluser()"
+                    style="width:100px;margin-left: 15px">取消</button>
+            </div>
+
+        </form>
+    </div>
+    <my-pager ng-show="true"></my-pager>
+</body>
+<script type="text/javascript" src="../../plugin/jquery/jquery.min.js"></script>
+<script type="text/javascript" src="../../plugin/jquery/jquery.validate.js"></script>
+<script type="text/javascript" src="../../plugin/jquery/messages_zh.js"></script>
+<script type="text/javascript" src="../../plugin/angular/angular.min.js"></script>
+<script type="text/javascript" src="../../plugin/angular/angular-ui-router.min.js"></script>
+<script type="text/javascript" src="../../plugin/angular/angular-sanitize.min.js"></script>
+<script type="text/javascript" src="../../plugin/bootstrap/js/bootstrap.min.js"></script>
+<script type="text/javascript" src="../../plugin/easyui/jquery.easyui.min.js"></script>
+<script type="text/javascript" src="../../js/app_directives.js"></script>
+<script type="text/javascript" src="../../js/app_controllers.js"></script>
+<script type="text/javascript" src="../../js/app_services.js"></script>
+<script type="text/javascript" src="../../plugin/layer/layer.min.js"></script>
+<script src="../../plugin/zTree3/js/jquery.ztree.all.min.js"></script>
+<script type="text/javascript" src="./js/columnsData.js"></script>
+<script type="text/javascript" src="./js/page.js"></script>
+
+</html>

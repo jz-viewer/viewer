@@ -1,0 +1,412 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>用户管理</title>
+    <link rel="stylesheet" href="../../plugin/easyui/easyui.css" />
+    <link rel="stylesheet" href="../../plugin/zTree3/css/zTreeStyle/zTreeStyle.css" />
+    <link rel="stylesheet" href="../../plugin/layer/skin/layer.css" />
+    <link rel="stylesheet" href="../../plugin/bootstrap/css/bootstrap.min.css" />
+    <link rel="stylesheet" href="../../plugin/bootstrap/css/font-awesome.min.css" />
+    <link rel="stylesheet" href="../../plugin/bootstrap/css/animate.css" />
+    <link rel="stylesheet" href="../../plugin/datetimepicker/jquery.datetimepicker.css" type="text/css" />
+    <link rel="stylesheet" href="../../css/base.css">
+    <link rel="stylesheet" href="./css/page.css">
+</head>
+
+<body class="clearfix" ng-app="myApp" ng-controller="appController"ng-cloak>
+    <div class="left_box fl">
+        <ul class="left_box_menu">
+            <li class="active">
+                <a><span class="cengji_icon"></span>层级查询</a>
+            </li>
+            <li>
+                <a><span class="anhao_icon"></span>案号查询</a>
+            </li>
+        </ul>
+    </div>
+    <div class="right_c_box fl">
+        <div class="r_header no-print">
+            <p class="r_header_title"><span class="y_line"></span>质量查询</p>
+            <div class="select_c_box select_c_box_court">
+                <!-- <div class="select_box"><span>时<i style="visibility: hidden">占位</i>间：</span>
+                    <div class="btn-group dropdown my-dropdown" id="dropdown">
+
+                        <input readonly="readonly" type="input" class="btn my-btn-default btn-default dropdown-toggle"
+                            data-toggle="dropdown" aria-haspopup="true" ng-model="param.paramTime" aria-expanded="false">
+
+                        </input>
+                        <input type="hidden" name="hidedrop_1" id="hidedrop_1" value="超级管理员" />
+                        <ul class="dropdown-menu b_ul_menu">
+                            <li ng-repeat="item in parmTimeList" ng-click="_selTime(item,$event)"><a href="#">{{item}}</a></li>
+                        </ul>
+                        <span class="input-group-addon" data-toggle="dropdown" aria-haspopup="true"
+                            aria-expanded="true">
+                            <span class="caret ng-hide" ng-show="!param.paramTime"></span>
+                            <i class="fa fa-close" ng-show="param.paramTime" ng-click="_clearParmTime()"></i>
+                        </span>
+                    </div>
+                </div> -->
+                <div class="btn-group dropdown my-dropdown" id="dropdown">
+                    <span
+                        style="float: left;display: inline-block;height: 40px;line-height: 40px;margin-right: 4px;">时<i
+                            style="visibility: hidden">占位</i>间：</span>
+                    <input readonly="readonly" style="font-size: 12px;height: 34px;width: 184px;"
+                        class="btn my-btn-default btn-default dropdown-toggle" ng-model="timeScope"
+                        data-toggle="dropdown" placeholder="本月" aria-haspopup="true" aria-expanded="false" />
+                    <input type="hidden" name="hidedrop_1" id="hidedrop_1" value="本月" />
+                    <ul class="dropdown-menu b_ul_menu time_drop_menu">
+                        <li><a ng-click="selectTime($event)" href="#">本月</a></li>
+                        <li><a ng-click="selectTime($event)" href="#">上月</a></li>
+                        <li><a ng-click="selectTime($event)" href="#">本周</a></li>
+                        <li><a ng-click="selectTime($event)" href="#">上周</a></li>
+                        <li><a ng-click="selectTime($event)" href="#">今天</a></li>
+                        <li><a ng-click="selectTime($event)" href="#">昨天</a></li>
+                        <li><a ng-click="selectTime($event)" href="#">近半年</a></li>
+                        <li><a ng-click="selectTime($event)" href="#">近一年</a></li>
+                        <li><a href="#" ng-click="timeZidingyi()">自定义</a></li>
+                    </ul>
+                    <span class="input-group-addon" data-toggle="dropdown" aria-haspopup="true" aria-expanded="true">
+                        <span class="caret ng-hide" ng-show="true"></span>
+                        <i class="fa fa-close" ng-show="false" ng-click="_clearCourts()"></i>
+                    </span>
+                </div>
+                <!-- <div class="select_box"><span>法<i style="visibility: hidden">占位</i>院：</span>
+                    <div class="btn-group dropdown my-dropdown" id="dropdown">
+
+                        <input id="fayuan_input" ng-model="param.courts_text" readonly="readonly" type="input" class="btn my-btn-default btn-default dropdown-toggle"
+                            data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+
+                        </input>
+                        <input type="hidden" name="hidedrop_1" id="hidedrop_1" value="超级管理员" />
+                        <div class="dropdown-menu b_ul_menu my_drop">
+                            <div class="tree_content">
+                            </div>
+                        </div>
+                        <span class="input-group-addon" data-toggle="dropdown" aria-haspopup="true"
+                            aria-expanded="true">
+                            <span class="caret ng-hide" ng-show="param.courts_id.length == 0"></span>
+                            <i class="fa fa-close" ng-show="param.courts_id.length != 0" ng-click="_clearCourts()"></i>
+                        </span>
+                    </div>
+                </div> -->
+                <div style="display: none;" class="select_box init_fayuan"><span>法<i
+                            style="visibility: hidden">占位</i>院：</span>
+                    <div class="btn-group dropdown my-dropdown" id="dropdown">
+
+                        <input id="fayuan_input" style="width: 210px;" readonly="readonly" placeholder="全部地区"
+                            type="input" class="btn my-btn-default btn-default dropdown-toggle" data-toggle="dropdown"
+                            aria-haspopup="true" aria-expanded="false" />
+                        <input type="hidden" name="hidedrop_1" id="hidedrop_1" value="超级管理员" />
+                        <!-- <ul class="dropdown-menu b_ul_menu my_drop arae_list">
+                                <li  ng-repeat="item in areaList" ng-click="_selCourt(item,$event)"><a href="##"><span></span>{{item.courtAreaName}}</a></li>
+                        </ul> -->
+                        <!-- <span class="input-group-addon" style="visibility: hidden" data-toggle="dropdown" aria-haspopup="true"
+                            aria-expanded="true">
+                            <span class="caret ng-hide" ng-show="!courtsText"></span>
+                            <i class="fa fa-close" ng-show="courtsText" ng-click="_clearCourts()"></i>
+                        </span> -->
+                    </div>
+                </div>
+                <div class="select_box case_fayuan"><span>法<i style="visibility: hidden">占位</i>院：</span>
+                    <div class="btn-group dropdown my-dropdown" id="dropdown">
+
+                        <input id="fayuan_input_case" style="width: 210px;text-align: left" list="courtList"
+                            placeholder="请输入法院名称" type="input"
+                            class="selectInput btn my-btn-default btn-default dropdown-toggle" data-toggle="dropdown"
+                            aria-haspopup="true" aria-expanded="false" />
+                        <input type="hidden" name="hidedrop_1" id="hidedrop_1" value="超级管理员" />
+                        <div class="picture_click dropDowns" style=""></div>
+                        <div id="courtList" class="selectList">
+                            <!-- <div class="zlcxlist" ng-repeat="item in courtList" id="{{item.courtId}}" data-pid="{{gj.gjdm}}">{{item.courtName}}</div> -->
+                            <div class="zlcxlist" ng-click="selectItemClick(item)" ng-repeat="item in courtList"
+                                id="{{item.courtId}}">{{item.courtName}}</div>
+                        </div>
+                        <!-- <ul class="dropdown-menu b_ul_menu my_drop arae_list">
+                                <li  ng-repeat="item in areaList" ng-click="_selCourt(item,$event)"><a href="##"><span></span>{{item.courtAreaName}}</a></li>
+                        </ul> -->
+                        <span class="input-group-addon" style="pointer-events: none;position: absolute; top: 0; height: 34px; right: 0; width: 35px;" data-toggle="dropdown" aria-haspopup="true"
+                            aria-expanded="true">
+                            <span class="caret ng-hide" ng-show="!courtsText"></span>
+                            <i class="fa fa-close" ng-show="courtsText" ng-click="_clearCourts()"></i>
+                        </span>
+                    </div>
+                </div>
+                <div class="select_box select_box_room"><span>庭<i style="visibility: hidden">占位</i>室：</span>
+                    <div class="btn-group dropdown my-dropdown" id="dropdown">
+
+                        <input id="tz_input" ng-model="namesList.roomName" readonly="readonly" type="input"
+                            placeholder="全部庭室" class="btn my-btn-default btn-default dropdown-toggle"
+                            data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+
+                        </input>
+                        <input type="hidden" name="hidedrop_1" id="hidedrop_1" value="超级管理员" />
+                        <ul class="dropdown-menu b_ul_menu tsdropdown-menu">
+                            <li ng-click="selRoom(item)" ng-repeat="item in allRoomsList"><a href="#"><span
+                                        style="display: none"></span>{{item.courtRoomName}}</a>
+                            </li>
+                        </ul>
+                        <span class="input-group-addon" data-toggle="dropdown" aria-haspopup="true"
+                            aria-expanded="true">
+                            <span class="caret ng-hide" ng-show="true"></span>
+                            <i class="fa fa-close" ng-show="false" ng-click="_clearCourt()"></i>
+                        </span>
+                    </div>
+                </div>
+                <div class="select_box select_box_cbr"><span><i style="visibility: hidden">占</i>承办人：</span>
+                    <div class="btn-group dropdown my-dropdown" id="dropdown">
+
+                        <input readonly="readonly" ng-model="namesList.cbrName" id="cbr_name" type="input"
+                            placeholder="全部法官" class="btn my-btn-default btn-default dropdown-toggle"
+                            data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+
+                        </input>
+                        <input type="hidden" name="hidedrop_1" id="hidedrop_1" value="超级管理员" />
+                        <ul class="dropdown-menu b_ul_menu">
+                            <li ng-click="selCbr(item)" ng-repeat="item in allCbrList"><a
+                                    href="#">{{item.userFullName}}</a></li>
+                        </ul>
+                        <span class="input-group-addon cbr_name-addon" data-toggle="dropdown" aria-haspopup="true"
+                            aria-expanded="true">
+                            <span class="caret ng-hide" ng-show="true"></span>
+                            <i class="fa fa-close" ng-show="false" ng-click="_clearCourt()"></i>
+                        </span>
+                    </div>
+                </div>
+                <div class="select_box  select_c_box_case"><span style="left: 0;">是否合格：</span>
+                    <div class="btn-group dropdown my-dropdown" id="dropdown">
+                        <input readonly="readonly" ng-model="namesList.hegeName" type="input" placeholder="全部"
+                            class="btn my-btn-default btn-default dropdown-toggle" data-toggle="dropdown"
+                            aria-haspopup="true" aria-expanded="false">
+
+                        </input>
+                        <input type="hidden" name="hidedrop_1" id="hidedrop_1" value="超级管理员" />
+                        <ul class="dropdown-menu b_ul_menu">
+                            <li ng-click="selHege(item)" ng-repeat="item in hegeList"><a href="#">{{item.name}}</a></li>
+                        </ul>
+                        <span class="input-group-addon" data-toggle="dropdown" aria-haspopup="true"
+                            aria-expanded="true">
+                            <span class="caret ng-hide" ng-show="true"></span>
+                            <i class="fa fa-close" ng-show="false" ng-click="_clearCourt()"></i>
+                        </span>
+                    </div>
+                </div>
+                <!-- <button class="btn btn-info btn-sm my-search top_search" style="right: 210px;" ng-click="reset()">重置</button> -->
+                <button class="btn btn-info btn-sm my-search top_search" style="" ng-click="search()">查询</button>
+            </div>
+
+            <div class="select_c_box select_c_box_case">
+                <div class="select_box">
+                    <span class="control-label">案<i style="visibility: hidden">占位</i>号：</span>
+                    <div class="btn-group dropdown my-dropdown">
+                        <input placeholder="请输入案号" ng-model="param.caseName"
+                            style="width: 214px;text-align: left;padding-left: 10px;"
+                            class="btn my-btn-default btn-default dropdown-toggle" type="text">
+                    </div>
+                </div>
+                <div class="select_box"><span style=" left: 0px; ">案件类型：</span>
+                    <div class="btn-group dropdown my-dropdown" id="dropdown">
+
+                        <input readonly="readonly" ng-model="namesList.caseTypeName" placeholder="全部" type="input"
+                            class="btn my-btn-default btn-default dropdown-toggle" data-toggle="dropdown"
+                            aria-haspopup="true" aria-expanded="false">
+
+                        </input>
+                        <input type="hidden" name="hidedrop_1" id="hidedrop_1" value="超级管理员" />
+                        <ul class="dropdown-menu b_ul_menu">
+                            <li ng-click="selCaseType(item)" ng-repeat="item in allCaseTypeList"><a href="#"><span
+                                        style="display: none"></span>{{item.caseTypeName}}</a></li>
+                        </ul>
+                        <span class="input-group-addon" data-toggle="dropdown" aria-haspopup="true"
+                            aria-expanded="true">
+                            <span class="caret ng-hide" ng-show="true"></span>
+                            <i class="fa fa-close" ng-show="false" ng-click="_clearCourt()"></i>
+                        </span>
+                    </div>
+                </div>
+                <div class="select_box"><span style=" left: 0px; ">审判程序：</span>
+                    <div class="btn-group dropdown my-dropdown" id="dropdown">
+
+                        <input readonly="readonly" id="spcx_input" ng-model="namesList.spcxName" placeholder="全部"
+                            type="input" class="btn my-btn-default btn-default dropdown-toggle" data-toggle="dropdown"
+                            aria-haspopup="true" aria-expanded="false">
+
+                        </input>
+                        <input type="hidden" name="hidedrop_1" id="hidedrop_1" value="超级管理员" />
+                        <ul class="dropdown-menu b_ul_menu">
+                            <li ng-click="selSpcx(item)" ng-repeat="item in allSpcxList"><a href="#"><span
+                                        style="display: none"></span>{{item.spcxName}}</a></li>
+                        </ul>
+                        <span class="input-group-addon spcx_input-addon" data-toggle="dropdown" aria-haspopup="true"
+                            aria-expanded="true">
+                            <span class="caret ng-hide" ng-show="true"></span>
+                            <i class="fa fa-close" ng-show="false" ng-click="_clearCourt()"></i>
+                        </span>
+                    </div>
+                </div>
+                <div class="select_box"><span>案件阶段：</span>
+                    <div class="btn-group dropdown my-dropdown" id="dropdown">
+
+                        <input readonly="readonly" placeholder="全部" type="input" ng-model="namesList.ajjdName"
+                            class="btn my-btn-default btn-default dropdown-toggle" data-toggle="dropdown"
+                            aria-haspopup="true" aria-expanded="false">
+
+                        </input>
+                        <input type="hidden" placeholder="全部" name="hidedrop_1" id="hidedrop_1" value="超级管理员" />
+                        <ul class="dropdown-menu b_ul_menu">
+                            <li ng-click="selAjjd(item)" ng-repeat="item in anJianJieDuanList"><a
+                                    href="#">{{item.name}}</a></li>
+                        </ul>
+                        <span class="input-group-addon" data-toggle="dropdown" aria-haspopup="true"
+                            aria-expanded="true">
+                            <span class="caret ng-hide" ng-show="true"></span>
+                            <i class="fa fa-close" ng-show="false" ng-click="_clearCourt()"></i>
+                        </span>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="r_content">
+            <div id="timeForm">
+                <form name="myForm">
+                    <div class="group-row">
+                        <label class="control-label">起始时间 : &nbsp;</label>
+                        <div class="row-180">
+                            <input class="date-time-picker form-control input-sm col-xs-12 startTime" type="text"
+                                plugintype="datetime" placeholder="" ng-model="param.laDateStart" id="startTime" />
+                        </div>
+                    </div>
+                    <div class="group-row">
+                        <label class="control-label">&nbsp;&nbsp;&nbsp; &nbsp;</label>
+                        <label class="control-label">结束时间 : &nbsp;</label>
+                        <div class="row-180">
+                            <input class="date-time-picker form-control input-sm col-xs-12 endTime" type="text"
+                                plugintype="datetime" placeholder="" ng-model="param.laDateEnd" id="endTime" />
+                        </div>
+                    </div>
+                    <div class="group-row-btn">
+                        <button class="btn btn-info btn-sm b_20px" ng-click="saveTimeScope()"
+                            style="margin-left: 15px">确定</button>
+                    </div>
+                </form>
+            </div>
+            <div class="r_content_tool clearfix">
+                <div class="shijiandaun fl">
+                    <span class="shijian_text">{{bottimeScope}}</span>
+                    <span class="fayuan_text"> 全部地区</span>
+                    <span class="tingshi_text"> </span>
+                    <span class="faguan_text"> </span>
+                </div>
+                <div class="my_bths fr">
+                    <button class="btn btn-info btn-sm my-search zlcx-list-export"
+                        ng-click="exportExcle()">导出XLS</button>
+                    <button class="btn btn-info btn-sm my-search case-list-export"
+                        ng-click="exportExcleCase()">导出XLS</button>
+                    <button class="btn btn-info btn-sm my-search zlcx-list-print" ng-click="printExcle()">打印表格</button>
+                    <!-- <button class="btn btn-info btn-sm my-search case-list-print" ng-click="printExcleCse()">打印表格</button> -->
+                </div>
+            </div>
+           
+            <div class="t_content" id="print-content">
+                <table region="center" style="width:100%;min-height:500px;overflow: hidden" id="yichuli-table"
+                    class="easyui-datagrid">
+                </table>
+            </div>
+            <div class="t_content" id="print-content1" style="display: none">
+                <table region="center" style="width:100%;min-height:500px;overflow: hidden;" id="daying-table"
+                    class="easyui-datagrid">
+                </table>
+            </div>
+            <div id="pizhuForm" style="padding: 10px;float: left;width: 100%;display: none">
+                <form name="rootForm">
+                    <div class="form-group text-center" style="margin-top: 10px;margin-bottom: 0">
+                        <!-- <textarea name="" id="" cols="30" rows="5">
+                                    
+                                </textarea> -->
+                        <input ng-model="pizhuMsgText" style="width: 80%;padding-left: 10px;height: 40px;color: #000;"
+                            type="text" placeholder="请输入批注内容" />
+                    </div>
+                    <div class="form-group text-center" style="margin-top: 10px;margin-bottom: 0">
+                        <button class="my-search btn btn-info btn-sm b_60px" ng-click="savePizhu()"
+                            style="width:100px;margin-left: 15px">保存</button>
+                        <button class="my-search btn btn-info btn-sm b_60px" ng-click="cancelpizhu()"
+                            style="width:100px;margin-left: 15px">取消</button>
+                    </div>
+                </form>
+            </div>
+            <div id="heshiForm" style="padding: 10px; float: left; width: 100%; display: none;"
+                class="layui-layer-wrap">
+                <form name="myForm-add" class="ng-pristine ng-valid">
+                    <div class="form-group">
+                        <label class="control-label col-xs-5">合格状态：</label>
+                        <div class="row-180">
+                            <div class="input-group col-xs-12 input-group-sm">
+                                <input type="text" placeholder="请选择" class="form-control" data-toggle="dropdown"
+                                    readonly="readonly" aria-haspopup="true" ng-model="hegeStateText">
+                                <ul class="dropdown-menu" aria-labelledby="dropdownMenu1">
+                                    <li ng-repeat="item in hegeStateTextList" ng-click="hegeState(item)">{{item.name}}
+                                    </li>
+                                </ul>
+                                <span class="input-group-addon" data-toggle="dropdown" aria-haspopup="true"
+                                    aria-expanded="false"><span class="caret"></span></span>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label class="control-label col-xs-5"><em></em>不合格原因：</label>
+                        <div class="row-180">
+                            <p>缺少卷宗</p>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label class="control-label col-xs-5"><em></em>批注内容：</label>
+                        <div class="row-180">
+                            <p>缺少卷宗</p>
+                        </div>
+                    </div>
+                    <!-- <div class="form-group">
+                        <label class="control-label col-xs-5">核实说明：</label>
+                        <div class="row-180">
+                            <div class="input-group col-xs-12 input-group-sm">
+                                <input type="text" placeholder="请选择" class="form-control" data-toggle="dropdown" readonly="readonly" aria-haspopup="true"  ng-model="selHeshiMsgText">
+                                <ul class="dropdown-menu" aria-labelledby="dropdownMenu1">
+                                    <li ng-repeat = "item in selHeshiMsgList" ng-click="selHeshiMsg(item)">{{item.name}}</li>
+                                </ul>
+                                <span class="input-group-addon" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"><span class="caret"></span></span>
+                            </div>
+                        </div>
+                    </div> -->
+                    <div class="form-group text-center" style="margin-bottom: 0;width: 95%;margin-top: 8px;">
+                        <button class="btn btn-info btn-sm b_60px" ng-click="saveHeshi()"
+                            style="margin-left: 15px">保存</button>
+                        <button class="btn btn-info btn-sm b_60px" ng-click="cancelSaveHeshir()"
+                            style="margin-left: 15px">取消</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+    <my-pager></my-pager>
+</body>
+<script type="text/javascript" src="../../plugin/jquery/jquery.min.js"></script>
+<script type="text/javascript" src="../../plugin/jquery/jquery.validate.js"></script>
+<script type="text/javascript" src="../../plugin/jquery/messages_zh.js"></script>
+<script type="text/javascript" src="../../plugin/angular/angular.min.js"></script>
+<script type="text/javascript" src="../../plugin/angular/angular-ui-router.min.js"></script>
+<script type="text/javascript" src="../../plugin/angular/angular-sanitize.min.js"></script>
+<script type="text/javascript" src="../../plugin/bootstrap/js/bootstrap.min.js"></script>
+<script type="text/javascript" src="../../plugin/easyui/jquery.easyui.min.js"></script>
+<script type="text/javascript" src="../../js/app_directives.js"></script>
+<script type="text/javascript" src="../../js/app_controllers.js"></script>
+<script type="text/javascript" src="../../js/app_services.js"></script>
+<script type="text/javascript" src="../../plugin/layer/layer.min.js"></script>
+<script src="../../plugin/zTree3/js/jquery.ztree.all.min.js"></script>
+<script type="text/javascript" src="../../plugin/datetimepicker/jquery.datetimepicker.js"></script>
+<script src="../../plugin/print/printPage.js"></script>
+<script type="text/javascript" src="./js/columnsData.js"></script>
+<script type="text/javascript" src="./js/page.js"></script>
+
+</html>

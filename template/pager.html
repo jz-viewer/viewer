@@ -1,0 +1,17 @@
+<div id="myPager">
+    <div class="btn-group page-size">
+            <label class="mysx" for=""><span>每页显示</span></label>
+        <button type="button" class="btn btn-default btn-sm" ng-repeat="item in pagerArray"
+                ng-class="{'btn-primary':param.pageSize == item}" ng-click="_myPagerSetPagerNum(item)">{{item}}</button>
+    </div>
+    <div class="page-bar">
+        <i class="fa fa-fast-backward" title="首页" ng-click="_myPageSetPageIndex(1)"></i>
+        <i class="fa fa-backward" title="上一页" ng-click="_myPageSetPageIndex(param.currentPage - 1, 'back')"></i>
+        <span><input type="text" class="form-control input-sm" ng-model="pageNumCol" ng-change="_myPageSetPageIndex(pageNumCol)"
+                     onkeyup="this.value=this.value.replace(/\D/g,'')" onafterpaste="this.value=this.value.replace(/\D/g,'')"></span>
+        <label>/ 共{{param.pages}}页</label>
+        <i class="fa fa-forward" title="下一页" ng-click="_myPageSetPageIndex(param.currentPage + 1)"></i>
+        <i class="fa fa-fast-forward" title="尾页" ng-click="_myPageSetPageIndex(param.pages)"></i>
+    </div>
+     <div class="pagination-info" ng-show="param.total"> 共记录<span >{{param.total}}</span>条数据 </div>
+</div>
